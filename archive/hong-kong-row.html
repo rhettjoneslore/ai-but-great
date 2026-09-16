@@ -1,0 +1,21 @@
+<!--
+  ARCHIVED — the Hong Kong comparison row, removed from index.html on Sep 16, 2026.
+
+  To put it back:
+  1. Paste the <article> block below into index.html, inside <div class="compare">,
+     after the WriteHuman/Waymo row.
+  2. Nothing else is needed — the text itself is still in docs.js under the keys
+     "ai_hongkong" (ChatGPT + Grammarly humanizer, 8 paragraphs) and
+     "human_hongkong" (Hamsters, "How Laissez-Faire Was Hong Kong?", 23 paragraphs).
+     Those entries were left in place, so the boxes will fill themselves in.
+  3. Bump the version on the docs.js script tag (e.g. ?v=3) so browsers reload it.
+
+  Source PDFs these came from:
+    AI    — ~/Downloads/How Laissez-Faire Was Postwar Hong Kong-.pdf
+    Human — ~/Downloads/pdf (1).pdf
+-->
+
+        <article class="compare-row">
+          <p class="col">In this response, we gave a ChatGPT a heavily optimized 300-word style prompt, and then ran the response through Grammarly’s AI humanizer.</p>
+          <div class="duo-doc" data-pair="ai_hongkong,human_hongkong"></div>
+        </article>

@@ -244,14 +244,9 @@
   }
   .ph .label { background: var(--sunk); padding: 4px 8px; text-transform: none; letter-spacing: 0.02em; }
   .ph.tall { aspect-ratio: 16 / 10; max-width: 560px; }
+  .code-shot { max-width: 560px; width: 100%; border: 1px solid var(--rule); border-radius: 6px; }
   .duo-ph { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-  .rail-wrap { display: flex; flex-direction: column; gap: 14px; }
-  .rail-top { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
-  .rail-btns { display: flex; gap: 8px; }
-  .rail-btns button { width: 44px; height: 44px; padding: 0; border-radius: 50%; font-size: 1.1rem; }
-  .rail { display: grid; grid-auto-flow: column; grid-auto-columns: min(360px, 82%); gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; scrollbar-color: var(--rule) transparent; }
-  .rail .ph { scroll-snap-align: start; aspect-ratio: 3 / 4; }
 
   .pull { font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.05; max-width: 20ch; }
   .nda { font-size: clamp(1.15rem, 1.8vw, 1.35rem); max-width: 48ch; }
@@ -434,21 +429,11 @@
         <h2 class="long">Another thing: We can make your AI explain code and answer technical questions way better without losing/changing any important info.</h2>
         <p class="lede">You know how Claude code usually gives confusing shitty responses?</p>
       </div>
-      <div class="ph tall"><span class="label">Photo</span></div>
+      <img class="code-shot" src="code-claude.png?v=1" alt="Claude Code’s answer about a LinkedIn X-ray search string, headed “What’s wrong with your string”">
 
       <p class="lede col">Well, what if it wasn’t a confusing shitty response? See our edit:</p>
-      <div class="ph tall"><span class="label">Photo</span></div>
+      <img class="code-shot" src="code-edit.png?v=1" alt="Our edit of the same answer, headed “Fix your string”">
 
-      <div class="rail-wrap">
-        <div class="rail-top">
-          <p class="lede">See 10 more edits:</p>
-          <div class="rail-btns">
-            <button class="btn" id="rail-prev" type="button" aria-label="Previous edits">←</button>
-            <button class="btn" id="rail-next" type="button" aria-label="More edits">→</button>
-          </div>
-        </div>
-        <div class="rail" id="rail" tabindex="0"></div>
-      </div>
 
       <p class="col">Note: For now, our method of making AI explain code better is just a really good system prompt / skill file (far simpler than our core product). Funnily enough, it’s <em>still</em> probably the best available humanizer.</p>
       <p class="col">But, very quickly, we’ll turn this AI coding agent humanizer into our core product – a downloadable API that hooks into your Claude Code, Codex, etc. – where all you’ll do is copy a single command into your AI coding agent, and it’ll then always write like a human.</p>
@@ -645,16 +630,6 @@ const ANSWER_KEY = [
     });
   });
 
-  /* ---------- 10 edits rail ---------- */
-  const rail = $("rail");
-  for (let k = 1; k <= 10; k++) {
-    const d = document.createElement("div"); d.className = "ph";
-    d.innerHTML = '<span class="label">Photo</span>';
-    rail.appendChild(d);
-  }
-  const step = () => (rail.firstElementChild?.getBoundingClientRect().width || 300) + 14;
-  $("rail-prev").addEventListener("click", () => rail.scrollBy({ left: -step(), behavior: "smooth" }));
-  $("rail-next").addEventListener("click", () => rail.scrollBy({ left: step(), behavior: "smooth" }));
 
   /* ---------- Pangram screenshot fallback ---------- */
   const img = $("pangram-img");

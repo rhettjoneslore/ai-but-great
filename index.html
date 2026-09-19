@@ -280,7 +280,8 @@
     .test-read { border-right: 0; border-bottom: 1px solid var(--rule); }
     .essay { height: 440px; }
     .choices { grid-template-columns: 1fr; }
-    .duo { grid-template-columns: 1fr; }
+    .duo { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .pane-body { height: 380px; padding: 14px; font-size: 0.85rem; }
     .duo-ph { gap: 10px; }
     .duo-ph .ph { padding: 12px; }
   }
@@ -290,164 +291,209 @@
     .test-side { padding: 18px; }
     .top .btn { padding: 10px 14px; font-size: 0.85rem; }
   }
+
+  /* ---------- v2 ---------- */
+  .sample-label { text-transform: none; letter-spacing: 0.01em; font-size: 0.82rem; }
+  .bigtitle { font-size: clamp(2.3rem, 4.6vw, 3.4rem); }
+  .shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
+  .shots.slopgrid { display: block; column-count: 2; column-gap: 14px; }
+  .shots.slopgrid figure { break-inside: avoid; margin: 0 0 14px; }
+  @media (max-width: 620px) { .shots.slopgrid { column-count: 1; } }
+  .shots .ph { aspect-ratio: 4 / 3; }
+  .shots.one { grid-template-columns: 1fr; gap: 20px; }
+  .shots figure { margin: 0; }
+  .applications { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 12px; }
+  .subhead { font: 400 clamp(1.4rem, 2.4vw, 1.9rem)/1.2 var(--f-display); margin: 0; }
+  .subhead.spaced { margin-top: 22px; }
+  main p a, main li a { color: var(--cobalt); text-decoration: underline; text-underline-offset: 2px; }
+  main p a:hover, main li a:hover { text-decoration-thickness: 2px; }
+  .qa { display: flex; flex-direction: column; gap: clamp(36px, 5vw, 56px); }
+  .qa-item { display: flex; flex-direction: column; gap: 14px; }
+  .qa-q { font: 400 clamp(1.1rem, 1.8vw, 1.35rem)/1.3 var(--f-display); text-wrap: balance; }
+  .qa-item p:not(.qa-q) { font-size: 0.95rem; line-height: 1.65; }
+  .rockefeller { font-family: var(--f-read); line-height: 1.75; }
+  .markets { font-variant-numeric: tabular-nums; }
+  .closing-line { font: 400 clamp(1.45rem, 2.7vw, 2.05rem)/1.25 var(--f-display); color: var(--ink); text-wrap: balance; }
+  @media (max-width: 760px) { .shots { grid-template-columns: 1fr 1fr; } }
+
+  .v2-footer { max-width: var(--wide); margin-inline: auto; padding-block: 48px 64px; border-top: 1px solid var(--rule); }
+  .v2-footer a { font-family: var(--f-display); font-size: 1.25rem; color: var(--cobalt); text-decoration: none; }
+  .v2-footer a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
 
 <header class="top">
   <a class="mark" href="#">AI <em>But</em> Great</a>
-  <a class="top-cta" href="mailto:rhett@aibutgreat.com">Interested? Email <span>rhett@aibutgreat.com</span> to join the waitlist</a>
+  <a class="top-cta" href="mailto:rhettiro@gmail.com">Email me questions or to join the waitlist: <span>rhettiro@gmail.com</span></a>
 </header>
 
 <main class="wrap">
 
-  <!-- 1. Hero + Turing test -->
-  <section class="hero" id="test">
+  <!-- Hero + Turing test -->
+  <section class="hero">
     <div class="hero-head">
       <h1>We made the first ever non-AI-sounding AI</h1>
       <p class="lede">Literally no AI has passed a Turing test until now. Take the test:</p>
     </div>
-
-    <div class="test" aria-label="Turing test">
-      <div class="test-read">
-        <div class="test-bar">
-          <span class="label" id="sample-label">Sample 1/20</span>
-        </div>
-        <div class="essay" id="essay" tabindex="0">
-          <div class="essay-inner" id="essay-inner"></div>
-        </div>
-      </div>
-
-      <aside class="test-side">
-        <p class="q">Human or AI?</p>
-        <div class="verdicts">
-          <button class="verdict" id="guess-human" data-guess="human">Human</button>
-          <button class="verdict" id="guess-ai" data-guess="ai">AI</button>
-        </div>
-
-        <div class="result" id="result" hidden>
-          <span class="result-title" id="result-title"></span>
-          <span class="result-sub" id="result-sub"></span>
-        </div>
-
-        <div class="side-foot">
-          <div class="track" id="track" aria-label="Jump to sample"></div>
-          <button class="btn solid" id="next" disabled>Next sample →</button>
-        </div>
-      </aside>
-    </div>
+    <div class="test-mount" data-test></div>
   </section>
 
-  <!-- 2. Other humanizers -->
+  <!-- Detectors -->
   <section>
     <div class="stack-lg">
-      <h2 class="col">Don’t believe ours is better? If you're good at noticing AI tells, look at the other AI humanizers:</h2>
+      <h2 class="col">No AI humanizer on the entire internet currently passes AI detectors. Ours does.</h2>
 
-      <div class="compare">
-        <article class="compare-row">
-          <p class="col">In one of these responses, Opus 5 uses one of the best available anti-AI skill files on the internet. The other response is human-written.</p>
-          <div class="duo-doc" data-pair="ai_labor,human_labor"></div>
-        </article>
+      <div class="shots">
+        <figure class="shot"><img src="pangram-result.png?v=3" alt="Pangram scan: 475 words, graded Human Written with high confidence"></figure>
+        <figure class="shot"><img src="detector-zerogpt.png" alt="ZeroGPT scan of the same essay: 0% AI GPT, “Your Text is Human written”"></figure>
+        <figure class="shot"><img src="detector-gptzero.webp" alt="GPTZero scan of the same essay: 100% human, “highly confident this text is entirely human”"></figure>
+      </div>
 
-        <article class="compare-row">
-          <p class="col">In one of these response, the most expensive version of writehuman.ai is used (the “passes Pangram” version, which released on Sep 3) – which is currently known as the best humanizer on the internet. The other response is human-written.</p>
-          <div class="duo-doc" data-pair="ai_waymo,human_waymo"></div>
-        </article>
+      <p class="lede col">A 475 word essay passed with <em>high confidence</em> on Pangram, with it still retaining all important facts. Incredible!</p>
+
+      <p class="col">The other AI humanizers, on the exact same prompt, did not pass AI detectors:</p>
+
+      <div class="shots">
+        <figure class="shot"><img src="fail-humalingo.webp" alt="Humalingo scan of another humanizer’s output: human score 6%, AI score 94%"></figure>
+        <figure class="shot"><img src="fail-pangram.webp" alt="Pangram scan of another humanizer’s output: 100% of this text is AI"></figure>
+        <figure class="shot"><img src="fail-gptzero.webp" alt="GPTZero scan of another humanizer’s output: AI 100%, human 0%"></figure>
       </div>
     </div>
   </section>
 
-  <!-- 3. Fact retention side by side -->
+  <!-- Dumbify -->
   <section>
     <div class="stack-lg">
       <div class="stack col">
         <h2 class="long">Furthermore, our AI doesn’t “dumbify” itself through the process of sounding more human. Our AI keeps its ability to state all important facts and speak intelligently.</h2>
-        <p class="lede">Look at our response side-by-side with Fable 5.1’s response, each with the same prompt:</p>
+        <p class="lede">Look at our response side-by-side with Opus 5’s response, each with the same prompt:</p>
       </div>
+      <p class="prompt-line col">Prompt: <span>Tell the story of how the Brooklyn Bridge actually got built, start to finish, in about 700 words - the people, what it cost, what went wrong.</span></p>
+
       <div class="duo">
         <article class="pane">
           <div class="pane-head"><span class="pane-name ours">Clemens</span></div>
           <div class="pane-body">
-            <p>In March 2011, the world watched as protests against Libyan leader Muammar Gaddafi erupted into a full-blown civil war. The situation was dire, and the international community had to decide how to respond. Enter the Obama Administration.</p>
-            <p>The United States, along with other NATO allies, saw the opportunity to prevent a humanitarian disaster. Initially, the U.S. aimed to enforce a no-fly zone to protect civilians. But the stakes got higher when rebels requested more direct intervention. Obama and his team were torn between inaction and action, knowing that military involvement could lead to unforeseen consequences.</p>
-            <p>In hindsight, this looks so dumb—so why did they get involved in the first place? Well, the administration was driven by a mix of moral imperative and strategic interests. Obama was keen on demonstrating American leadership in a post-Iraq War era, showing that the U.S. could intervene responsibly and with international backing. Plus, the Arab Spring was already reshaping the Middle East, and ignoring Libya could mean losing influence in the region.</p>
-            <p>The turning point came in March 2011 when the UN Security Council authorized military action to protect civilians. NATO launched Operation Odyssey Dawn, with the U.S. leading the initial airstrikes. The goal was to degrade Gaddafi’s military capabilities and create a buffer zone for rebel forces.</p>
-            <p>However, the U.S. quickly handed over command to NATO, hoping to distance itself from direct combat roles. This move was partly due to domestic political pressures and a desire to avoid a prolonged military commitment. Yet, the situation in Libya remained volatile. Gaddafi’s regime continued to retaliate against rebels, and the U.S. found itself increasingly entangled.</p>
-            <p>By October 2011, Gaddafi was killed, and his regime crumbled. But the aftermath was chaotic. Libya descended into factional violence and instability, with rival governments vying for control. The country became a hotbed for extremist groups, including ISIS, which set up bases and recruited fighters.</p>
-            <p>Looking back, the decision to intervene in Libya appears to have been fraught with unintended consequences. The initial hope of a quick, clean operation turned into a messy, ongoing conflict. Critics argue that the lack of a coherent post-conflict plan left Libya vulnerable to chaos and extremism.</p>
-            <p>Obama himself later reflected on the decision. In a 2016 interview, he admitted, “We underestimated the strength of the regime, and the opposition was fractured and didn’t have a clear vision for the future.” This candid admission underscores the complexity of international interventions and the difficulty of predicting their outcomes.</p>
-            <p>The legacy of the Libyan intervention remains contentious. It serves as a cautionary tale about the risks of military intervention without a clear exit strategy. The U.S. learned hard lessons, but the scars of the decision linger in the unstable landscape of modern Libya.</p>
+            <p>This past weekend I visited the Brooklyn Bridge for the first time since high school. I crossed it walking, and I thought to myself that it was just as amazing now as it was when I walked across it twenty years ago. I also realized that I didn’t know anything about its history. So I read up a little bit. Turns out the story is a fascinating one — filled with visionary engineers, death, illness, corruption, tragedy, triumph, and the rise of the city we now call New York.</p>
+            <p>Back in the mid-1800s, NYC’s two largest cities (Manhattan and Brooklyn) weren’t connected to each other by any bridges. There was just a ferry connecting them. As NYC industrialized, it began to become clear that the ferry system wasn’t going to keep up with population growth. In 1867, the German immigrant John A. Roebling proposed a giant suspension bridge connecting the two cities. A suspension bridge was very novel at the time — in fact, this would have been the first big one ever built. But Roebling was confident that it could be done; he had already built a similar bridge in Cincinnati. In the 1870s, his designs for a much bigger bridge over New York Bay got the go-ahead.</p>
+            <p>In order to build the bridge, Roebling needed to build two big stone towers — one in Manhattan and one in Brooklyn. In order to do that, he had to dig deep into the riverbed to make sure the towers would hold steady against the tides. To dig into the bedrock under the East River, he invented huge caissons — essentially big boxes you lower down into the water until their tops break the surface. Workers would descend into the caissons and dig, using compressed air to keep the water out. Caissons were an entirely new technology — and indeed, in 1869, one of the first ones sank in the East River. But Roebling quickly solved the problem. By July 1870, both caissons were completed — but not without cost. Roebling himself had developed “caisson disease”, now known as decompression sickness, because he descended into the caissons to inspect their progress. He died shortly afterward.</p>
+            <p>Roebling’s son Washington took over the job of managing the bridge project. He hired Emily Warren, a brilliant mathematician who had studied at MIT, as chief assistant. Washington would later marry Emily, but she remained the de facto manager of the entire project, taking care of all the financial and political issues while Washington managed the day-to-day engineering efforts.</p>
+            <p>Then came another major disaster. In January 1873, a storm swept through NYC. A huge wave struck the Brooklyn caisson, causing it to collapse and sink. Twelve men died. Washington Roebling, meanwhile, had begun spending long hours inside the caissons, and as the years wore on, decompression sickness claimed more and more of his strength. He began to suffer from headaches, dizziness, and memory loss. By 1874, Washington had been reduced to a shell of his former self. The doctors told him he would never walk again, and his right hand would never function properly. He resigned from the project, and was forced to remain bed-ridden for months.</p>
+            <p>Emily then stepped up as the actual manager of the bridge, coordinating every aspect of its construction. She was pregnant with the couple’s child during most of this period. Washington continued to act as her eyes and ears, offering advice from his sickbed, even though he was no longer physically able to leave the house. Meanwhile, the project was plagued with endless delays and cost overruns. Originally estimated to cost $5 million, the total ended up surpassing $15 million. Construction was hampered by lawsuits, by sabotage, and by corruption in the city government. The final cost was paid mostly by the federal government.</p>
+            <p>In May 1883, the bridge was finished. It opened to great fanfare, with thousands flocking to cross from one side to the other. It was an engineering marvel, the tallest suspension bridge in the world. But the real story of the Brooklyn Bridge is really the story of Washington and Emily Roebling. Washington, once the strongest man in America, spent most of the project lying in bed, unable to move. Emily, who was only 33 when the project was completed, did more than any man to see it through. She has gone down in history as one of the great unsung heroes of urban America.</p>
           </div>
         </article>
+
         <article class="pane">
-          <div class="pane-head"><span class="pane-name">Fable 5.1</span></div>
+          <div class="pane-head"><span class="pane-name">Opus 5</span></div>
           <div class="pane-body">
-            <h4 class="pane-h">The Libya Thing: How Obama Went to War Without Really Meaning To</h4>
-            <p>Quick refresher on where the world was in February 2011. Tunisia’s dictator had just fled. Mubarak had resigned on the 11th after eighteen days of Tahrir Square. The whole region felt like it was tipping, and the White House had spent weeks trying to look like it was on the right side of that.</p>
-            <p>Then Libya happened.</p>
-            <p>Protests started in Benghazi around February 15. Gaddafi didn’t do the Mubarak thing and step aside. He went on TV, called the protesters rats and cockroaches, and promised to hunt them down house by house. The east of the country fell to rebels almost immediately, and for a couple of weeks it looked like he was finished.</p>
-            <p>He wasn’t. By early March, his forces had regrouped and were rolling the rebels back town by town along the coast road. By mid-March, they were closing on Benghazi, a city of roughly 700,000 people, and Gaddafi was saying out loud that there’d be no mercy.</p>
-            <h4 class="pane-h">Why get involved at all</h4>
-            <p>This is the part worth sitting with, because the administration was split badly. Gates, Biden, and the Joint Chiefs were against it. Their argument was basically: this isn’t a vital U.S. interest, we’re already in two wars, and no one has a plan for what comes after. Clinton, Susan Rice, and Samantha Power were for it, and their argument was Rwanda and Srebrenica. Power had literally written the book on America standing by during genocides. Rice had been at the NSC in 1994. For that camp, letting Benghazi happen would be the defining moral failure of the presidency.</p>
-            <p>Then the incentives stacked up in a way that made “no” hard to say. France and Britain were pushing hard (Sarkozy especially). On March 12, the Arab League itself asked for a no-fly zone, which gave political cover nobody expected. And the whole thing looked cheap: air power only, no ground troops, allies doing most of the flying. Obama could act, avoid another Iraq, and not be the guy who cheered Tahrir Square and then watched a massacre.</p>
-            <p>He made the call the evening of March 15.</p>
-            <h4 class="pane-h">The war</h4>
-            <p>March 17: UN Security Council Resolution 1973 passes, authorizing “all necessary measures” to protect civilians. Russia, China, Germany, Brazil, and India abstained rather than veto, which matters later.</p>
-            <p>March 19: French jets hit Gaddafi’s armor outside Benghazi. That night the U.S. and UK fired over a hundred Tomahawks at Libyan air defenses. The U.S. ran the opening phase, then handed command to NATO on March 31. An anonymous adviser described the approach to The New Yorker as “leading from behind,” and that phrase stuck to Obama for the rest of his presidency.</p>
-            <p>It was supposed to be days. It was seven months. The mission quietly became regime change; “protecting civilians” meant bombing anything Gaddafi’s side moved. In May the administration blew past the War Powers 60-day limit and argued this didn’t count as “hostilities,” which annoyed basically everyone in Congress.</p>
-            <p>Rebels took Tripoli in late August. On October 20, Gaddafi was pulled out of a drainage pipe in Sirte and killed. NATO wrapped up October 31. Zero American deaths, about $1 billion spent. On paper, a win.</p>
-            <h4 class="pane-h">After</h4>
-            <p>There was no after. No stabilization force, no plan. The militias that toppled Gaddafi never disarmed. A year later, four Americans died in the attack on the Benghazi compound. By 2014, Libya was in a second civil war with two governments, ISIS held Sirte, and the country became the main launch point for migrant boats into Europe.</p>
-            <p>Asked in 2016 by Chris Wallace what his worst mistake was, Obama said: “Probably failing to plan for the day after what I think was the right thing to do in intervening in Libya.”</p>
+            <p>The Brooklyn Bridge was John Roebling's idea. He was a German immigrant who'd gotten rich making wire rope in Trenton and had already built suspension bridges at Niagara and Cincinnati. By the late 1860s, New York and Brooklyn were two separate cities joined only by ferries that stalled whenever the East River iced over, and Roebling pitched a bridge with a main span of nearly 1,600 feet, far longer than anything that existed. He estimated it would cost around $7 million. The New York Bridge Company got its charter in 1867, and the plans were approved in 1869.</p>
+            <p>Then, before construction even began, Roebling was standing on a ferry slip taking survey readings when a boat slammed into the pilings and crushed his foot. His toes were amputated. He rejected most conventional treatment in favor of water therapy, got tetanus, and died that July. The chief engineer was dead before the first shovel went in.</p>
+            <p>The job went to his son Washington, 32, a Civil War veteran who'd worked on the Cincinnati bridge with his father and had studied caisson work in Europe. The caissons were the first big challenge. These were enormous upside-down wooden boxes sunk to the riverbed. Men worked inside them in compressed air, digging out mud and rock while the tower masonry piled on top pushed the whole thing down. It was miserable, hot, dim work, and in December 1870 a fire broke out inside the Brooklyn caisson. Washington spent hours down there fighting it, and the repairs cost months.</p>
+            <p>The bigger killer was something nobody understood yet: caisson disease, what we now call the bends. Workers came up too fast from high pressure and collapsed with crippling joint pain, paralysis, or worse. The Manhattan caisson went down to 78 feet, and the deeper it went, the worse it got. More than a hundred men were affected and at least three died from it. Washington stopped the Manhattan caisson short of bedrock, betting the sand and gravel underneath was solid enough. He was right, and it's held ever since.</p>
+            <p>But in 1872 he got the bends himself, badly. He was left partially paralyzed, in constant pain, and too sensitive to light and noise to go to the site. For the rest of the project, over a decade, he ran it from a room in Brooklyn Heights, watching through a telescope.</p>
+            <p>This is where Emily Warren Roebling comes in. Washington's wife became his link to everyone: engineers, contractors, the board. She learned stress analysis, cable construction, and the math of catenary curves well enough to talk shop with the people building it, and a lot of people assumed she was the one actually making decisions. Historians still argue about how much was hers, but without her the project probably stalls or Washington gets pushed out, which almost happened in 1882 when Brooklyn's mayor tried to have him removed. The trustees voted to keep him.</p>
+            <p>The towers were done by 1876. That August, master mechanic E.F. Farrington became the first person to cross the river on the bridge, riding a little seat hanging from a wire, while crowds on both shores cheered.</p>
+            <p>Then came the wire scandal. The steel wire for the main cables came from a contractor named J. Lloyd Haigh, who was running a scam where wire that failed inspection got secretly swapped back onto the delivery wagons. By the time it was caught in 1878, a lot of bad wire was already spun into the cables and couldn't be taken out. Roebling's fix was to add around 150 extra wires to each cable. The corruption didn't stop there. Boss Tweed's Tammany machine had its hands in the early financing, with bribes greasing the political approvals.</p>
+            <p>The bridge opened on May 24, 1883. President Chester Arthur and Governor Grover Cleveland walked across; Emily had made the first ceremonial ride over it days earlier, carrying a rooster as a victory symbol. Washington watched the fireworks from his window.</p>
+            <p>Six days later someone on the crowded walkway, possibly after a woman tripped on the stairs, started a rumor that the bridge was collapsing. In the stampede, twelve people were crushed to death. The next year P.T. Barnum marched 21 elephants across to prove it was solid.</p>
+            <p>The final bill was about $15 million, more than double the original estimate. Somewhere between 20 and 30 workers died building it. It was the longest suspension bridge in the world for twenty years, and it's still carrying traffic today.</p>
           </div>
         </article>
       </div>
-      <p class="col">Another note: Though other AI humanizers have somewhat figured out shorter, easier categories like cold outbound emails, we can uniquely tackle harder categories like long-form opinion articles, which is pretty impressive! Our goal is to dominate every single category someone could use AI for.</p>
+
+      <div class="shots one">
+        <figure class="shot"><img src="bridge-clemens-pass.webp" alt="GPTZero scan of the Clemens response: highly confident this text is entirely human, human 90%"></figure>
+        <figure class="shot"><img src="bridge-opus-fail.webp" alt="GPTZero scan of the Opus 5 response: highly confident this text was AI generated, AI 100%"></figure>
+      </div>
     </div>
   </section>
 
-  <!-- 4. Pangram -->
+  <!-- MVP / proof of concept -->
+  <section>
+    <div class="stack col">
+      <p>As of now, we decided to make our MVP work really well in the “~600-word personalized opinion essay” niche purely as a proof-of-concept, since it’s a difficult category other AI humanizers suck at. This is good validation!</p>
+      <p>Beyond this proof-of-concept, we shall dominate every single category someone could use AI for. Now, will this be immensely difficult? Of course! It’s not like our current product works 100% of the time anyway. There’s a reason others haven’t been able to ‘skill file’ their way into perfectly humanized AI.</p>
+      <p>But – it’s possible. Our product is already validated.</p>
+      <p>If you want to know more details about how this works, reach out, sign an NDA, and we can chat.</p>
+    </div>
+  </section>
+
+  <!-- The problem -->
   <section>
     <div class="stack-lg">
       <div class="stack col">
-        <h2>And yes, our AI is the first ever AI humanizer to pass Pangram.</h2>
-        <p class="lede">A 475 word essay passed with high confidence. Incredible!</p>
+        <h2>AI sounding like AI is literally a $1T problem and <em>the</em> barrier to early AGI.</h2>
+        <p class="lede">It’s a slopfest out there!</p>
       </div>
-      <figure class="shot" style="margin:0">
-        <img src="pangram-result.png?v=3" alt="Pangram scan of a Clemens essay, “I would support”: 475 words, graded Human Written with high confidence" id="pangram-img">
-        <div class="ph" id="pangram-ph" hidden>
-          <span class="label">Pangram screenshot</span>
+
+      <div class="shots slopgrid">
+        <figure class="shot"><img src="slop-1.png" alt="AI customer support email from Pillow Cube about a late pillow"></figure>
+        <figure class="shot"><img src="slop-2.png" alt="LinkedIn comment proposing “E = mc² + AI”, with a one-word reply: “What”"></figure>
+        <figure class="shot"><img src="slop-3.webp" alt="Barbershop website written like a developer tool: “The haircut layer for the modern head”"></figure>
+        <figure class="shot"><img src="slop-4.png" alt="Substack post flagged by Pangram as 100% AI, under the line “The only AI I use is to correct my English”"></figure>
+      </div>
+
+      <p class="nda col">AI solved the Navier-Stokes existence and smoothness problem, yet AI cannot write a human-sounding email. What.</p>
+    </div>
+  </section>
+
+  <!-- What we are building -->
+  <section>
+    <div class="stack-lg">
+      <h2 class="bigtitle col">So what are we building?</h2>
+
+      <div class="stack col">
+        <p>First, we’ll make a paid consumer product that goes insanely viral (and also makes money). Here’s what it will do:</p>
+        <p><strong>Use case 1:</strong> A general non-AI-sounding AI chatbot (literally just a ChatGPT-style interface). On it, we have 100+ covered niches (software website copy generation, Substack-style ‘inform+entertain’ blogs, cold outbound emails, etc.).</p>
+        <p><strong>Use case 2:</strong> A two-clicks-to-install MCP plugin for AI coding agents (Claude Code, Cursor, Codex, etc.) that makes AI’s explanation of code much more straightforward and human-sounding.</p>
+        <p><strong>Use case 3:</strong> A “Write Like Me” tool where AI scans 10k+ words of your already-written docs, emails, texts, articles, etc. and writes like you.</p>
+        <p>The absolute quality of this product, combined with a meticulously planned virality campaign, will lead to absurd view counts.</p>
+        <p>With a good enough team, it is possible to rapidly make a first-of-its-kind product that does all 3 above use cases very well.</p>
+        <p>This consumer product will make money. A lot of people will pay for the above. However, we have a much easier path to $1b ARR.</p>
+        <h3 class="subhead spaced">Quite instantly after getting virality, we’ll offer the initial real money-maker (B2B chat):</h3>
+        <p>At Cased, though we tried the best available email customer service agencies, we still have 6 full-time Filipinos. Cased would easily pay $5k+/mo for a ‘handle my entire customer service inbox for me’ AI agency if a high quality one existed.</p>
+        <p>Now, companies like <a href="https://www.gorgias.com/" target="_blank" rel="noopener">Gorgias</a> are proven revenue-wise, yet still have an extremely incomplete product. AI email/chat/text B2B companies made <a href="https://www.researchandmarkets.com/reports/5851042/customer-service-software-market-report" target="_blank" rel="noopener">$8b/yr</a> in aggregate in 2025. Currently, <a href="https://www.grandviewresearch.com/industry-analysis/call-contact-center-outsourcing-market-report" target="_blank" rel="noopener">$60b/yr</a> is being spent on human customer service. BPO-focused low-to-middle-income economies have still not been automated yet; the Philippines BPO sector grew <a href="https://www.philstar.com/nation/2026/06/13/2534925/philippines-bpo-sector-grows-4-168m-despite-ai-fears" target="_blank" rel="noopener">4% in 2025</a> (I was in Manila 2 months ago). The opportunity is ripe!</p>
+        <p>And yes – current AI email companies are not too bad, provide value, and have a good amount of customers. AI is currently better at writing human-sounding emails than human-sounding essays. But, there is a HUGE gap between the current capabilities of AI email customer service companies and the best human customer service teams.</p>
+        <p>If 1,700 business like Cased pay us $5k/mo to manage their emails, we’re at $100m ARR. Wow – we might be the fastest ever company to get to $100m ARR! (Lovable, the record-holder, did it in 8 months.)</p>
+        <p>There are many applications in text/email/chat beyond just email customer service:</p>
+        <ul class="applications">
+          <li>Live chatbots on a website.</li>
+          <li>Outbound emails/DMs as a service.</li>
+          <li>Shopify app for writing website copy and product copy.</li>
+          <li>Recruiting – personalizing outreach to candidates.</li>
+          <li>Textable company phone number for customers looking to book.</li>
+          <li>Whitelabeling – companies like Gorgias pay us huge amounts to use our product.</li>
+          <li>Enterprise plans for companies to use our humanizer in an enclosed, secure manner.</li>
+        </ul>
+        <p>Side note – we’ll still need a little bit of a human in the loop. A part-time manager for check-ups and edge cases will be necessary; this is part of the $5k+/mo package.</p>
+      </div>
+
+      <div class="stack col">
+        <h3 class="subhead">Personal AI agent play:</h3>
+        <p>First off, I think it is absurd how Instinct has $0 revenue and 100k customers, yet <a href="https://techcrunch.com/2026/08/26/viral-ai-startup-instinct-has-raised-350-million-at-a-2-5-billion-valuation/" target="_blank" rel="noopener">raised $350m at $2.5b</a>. They’re even in talks to raise at $10b lol!</p>
+        <p>Goldfish, which claims to read your text on your computer write like you, is in fact really bad at writing like you. The list goes on. But this idea of a good AI agent is so powerful that it gets crazy attention.</p>
+        <p>The key reason these agents are broken is that they can't communicate externally on your behalf because it sounds like AI and everyone would know. I tested Instinct and Goldfish over and over and it could never write an email for me that I’d be okay with sending.</p>
+        <p>So, we're not trying to out-build Instinct's full agent framework (they have $350m and 100+ engineers). What we’ll dominate is the communication part. Our agent will be the first to correctly write emails/texts/messages for you, in your voice, done so well that you can send them without editing. We'll be a product for people who want an AI to actually properly handle their communication.</p>
+        <p>And we'll be a product that existing customers of AI agents use on top – an Instinct user who's frustrated that it can't email people will add our product to fix that. This will either become enormous on its own, or it’ll get acquired by one of the well-funded agent startups.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Counterarguments -->
+  <section>
+    <div class="stack-lg">
+      <h2 class="bigtitle col">Addressing counterarguments:</h2>
+
+      <div class="qa col">
+        <div class="qa-item">
+          <p class="qa-q">“If you do well, companies like OpenAI will easily solve this.”</p>
+          <p>Even though they have crazy good talent and funding, the problem is that their training process creates the problem. RLHF rewards the current writing structure that is now deemed as AI slop. Fixing that makes their models worse at the things their customers actually pay for. They care about racing on benchmarks and agents way more  than“sounding human”. They'll ship something like “choose between 10 voice styles” but the core humanization problem won’t be solved until AGI. The problem is structural. Even if Fable 6 sounds more natural, it still won't sound like your company or you personally.</p>
+          <p>Furthermore, it’s also gotten worse over time. Look at ChatGPT’s Dec 2022 response vs Sep 2026 response to the same prompt:</p>
         </div>
-      </figure>
-    </div>
-  </section>
-
-  <!-- 6. Code explanations -->
-  <section>
-    <div class="stack-lg">
-      <div class="stack col">
-        <h2 class="long">Another thing: We can make your AI explain code and answer technical questions way better without losing/changing any important info.</h2>
-        <p class="lede">You know how Claude code usually gives confusing shitty responses?</p>
       </div>
-      <img class="code-shot" src="code-claude.png?v=1" alt="Claude Code’s answer about a LinkedIn X-ray search string, headed “What’s wrong with your string”">
 
-      <p class="lede col">Well, what if it wasn’t a confusing shitty response? See our edit:</p>
-      <img class="code-shot" src="code-edit.png?v=1" alt="Our edit of the same answer, headed “Fix your string”">
-
-
-      <p class="col">Note: For now, our method of making AI explain code better is just a really good system prompt / skill file (far simpler than our core product). Funnily enough, it’s <em>still</em> probably the best available humanizer.</p>
-      <p class="col">But, very quickly, we’ll turn this AI coding agent humanizer into our core product – a downloadable API that hooks into your Claude Code, Codex, etc. – where all you’ll do is copy a single command into your AI coding agent, and it’ll then always write like a human.</p>
-      <p class="col">Our model writes copy for your vibecoded website in a non-AI way, explains the code to you in a non-AI way, answers your technical questions in a non-AI way – all that stuff, way better.</p>
-    </div>
-  </section>
-
-  <!-- 7. Objection -->
-  <section>
-    <div class="stack-lg">
-      <div class="stack">
-        <h2 class="pull">“Oh, won’t the improvement of AI eat your business alive?”</h2>
-        <p class="lede col">In fact, it’s gotten worse. Just look at ChatGPT’s output in December 2022 compared to Fable 5.1’s output in September 2026 from the same prompt: “Write a short essay in the style of Douglas Rushkoff about why crypto is evil and stupid.”</p>
-      </div>
       <div class="duo">
         <article class="pane">
           <div class="pane-head"><span class="pane-name">ChatGPT, Dec 2022</span></div>
@@ -475,69 +521,134 @@
           </div>
         </article>
       </div>
-      <p class="col">So, as AI gets better at synthesizing the average of the internet, and as AI becomes smarter, humanness degrades.</p>
-      <p class="col">P.S. Another cool note about our moat: What core AI chatbots especially obviously won’t be able to do is offer instant access to 1,000 different pre-trained niche author voices.</p>
+
+      <div class="qa col">
+        <div class="qa-item">
+          <p class="qa-q">"This is just prompt engineering."</p>
+          <p>We pass Pangram and no humanizer does that. We do <em>way</em> more than just prompt engineering at the moment. Again, reach out, sign an NDA, and we’ll tell you.</p>
+        </div>
+
+        <div class="qa-item">
+          <p class="qa-q">“Why don’t companies just take the available consumer product for $100, build an automated system themselves with their own developers to answer support emails, and avoid paying $7k/mo?”</p>
+          <p>Some will try. But the moment you're pushing 500+ emails/day through the consumer product, you’ll be paying $7k/mo in tokens anyway – and now you've also spent weeks of dev time building custom integrations, escalation logic, brand voice training, etc. Most companies will do the math and just buy the real thing.</p>
+        </div>
+
+        <div class="qa-item">
+          <p class="qa-q">"Open source will copy this."</p>
+          <p>Though our backend is difficult to recreate and requires way more effort than “just make a really good skill file”, yes, open source devs will make a similar version at some point. A few rebuttals though:</p>
+          <p>1) A company like Cased would still prefer to pay us to handle their email customer service than build their own infrastructure around an open-sourced version since we have a full-scope product (see above).</p>
+          <p>2) Distribution matters as much as tech. We’ll have an absurd first-mover + virality advantage. Some dev on GitHub won’t run paid ads or close B2B sales calls or have a brand name. Cracked, proven marketing teams win.</p>
+          <p>3) Our consumer product will have usage-based pricing that scales with volume. Any open source clone will still need to run on GPUs somewhere and customers will need to pay for that.</p>
+        </div>
+
+        <div class="qa-item">
+          <p class="qa-q">"AI email customer service companies like Gorgias have engineers and funding – won't they just make their own AI sound human to retain customers?"</p>
+          <p>Maybe, eventually. But humanization is our entire company – every engineer, dollar, and hour goes into humanization. Gorgias could probably copy our MVP but not our constantly-improved at-scale product. They'd need to either build proprietary humanization tech from scratch (months of focused ML work that is far different from their core product) or use open source / our consumer product as a bandaid. Meanwhile, if we're already deployed, already trained on brands' voices, and already a full platform, brands will stick with us.</p>
+          <p>Furthermore, companies who use AI email customer service agencies still have a large human team to fill in the gaps; however, we will replace the $5k-50k/mo human team – a price their customers who see them simply as software instead of team replacement won’t pay.</p>
+        </div>
+
+        <div class="qa-item">
+          <p class="qa-q">“Top AI agent companies, like Instinct, unlike Gorgias, have stupid amounts of funding, a cracked team of engineers, and a huge desire to humanize their product. Why won’t they copy you?”</p>
+          <p>As of now, companies like Instinct are much more focused on fixing their “actually don’t mess up flight booking for customers” problem than their “write human-sounding emails better” problem. But of course they care and will get to work on making their product sound more human! Competition is inevitable in every market. Yes, Instinct will eventually improve their output quality – maybe with open source models or doing it in-house with their own ML talent. Doesn't matter. By the time they catch up, we’ll already own the "AI that sounds human" brand, we'll have captured hundreds of thousands of trained voice profiles that they can't replicate, and we'll have locked in B2B contracts. The history of tech is "company with the best distribution wins." It’s pretty easy to win in an exponentially exploding market when you have a proven marketing team, a viral consumer product, a head start, and a core base of customers who care about humanization.</p>
+        </div>
+
+        <div class="qa-item">
+          <p class="qa-q">“Ok, surely, AI humanization will be figured out en masse at some point. Then what?”</p>
+          <p>Sure, two years in – or maybe even less than a year in – making AI sound human will be pretty easy and commoditized, our humanization tech advantage will be gone, and companies will copy us exactly. However, by then, we won’t need the tech advantage. If a customer company decided to switch us off, they’d have to spend months changing their routing, retraining their team, etc. – they obviously won’t do this just because Zendesk added a working “sound more human” button. The beauty of relationship-dependent B2B companies is that competition and great AI don’t destroy contracts.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- 8. Overall vision -->
+  <!-- Overall vision -->
+  <section>
+    <div class="stack-lg">
+      <h2 class="bigtitle col">Overall vision:</h2>
+      <div class="stack col">
+        <p>AI sounding like AI is a trillion-dollar bottleneck between now and AGI. Every single application of AI that goes through a human (customer service, sales, recruiting, personal assistants, agents, you name it) is crippled by the fact that people can tell it's AI.</p>
+        <p>Now is the time to build the company that removes that bottleneck.</p>
+        <p>At full scale, we'll be everywhere AI talks to people. Millions of consumers will use us to make AI sound like them. Companies across every industry will use us to finally effectively replace their copywriting teams.</p>
+        <p class="markets">Copywriting market: $30b. CS outsourcing: $110b. Sales outbound: $50b. Recruiting: $500b. All of this money exists because humans sound like humans.</p>
+        <p class="closing-line">And just remember – as of right now, we are the first ever AI product to pass a Turing test:</p>
+      </div>
+      <div class="test-mount" data-test></div>
+    </div>
+  </section>
+
+  <!-- About me -->
   <section>
     <div class="stack col">
-      <h2>Overall vision:</h2>
-      <p class="nda">1) A complete website/app, just like ChatGPT.</p>
-      <p class="nda">2) An attachment to plug into current AI models.</p>
-    </div>
-  </section>
-
-  <!-- 9. How it works -->
-  <section>
-    <div class="stack col">
-      <h2>What we do on the backend:</h2>
-      <p class="nda">We can’t give you our secret sauce now, but we can have you sign a NDA if you want to chat lol.</p>
-    </div>
-  </section>
-
-  <!-- 10. Waitlist -->
-  <section id="waitlist">
-    <div class="waitlist">
-      <p class="lede">We’ll be releasing soon-ish!</p>
-      <a class="mail-cta" href="mailto:rhett@aibutgreat.com">Interested? Email <span>rhett@aibutgreat.com</span> to join the waitlist</a>
+      <h2>About me:</h2>
+      <p>I’m Rhett. My life goal is to eliminate extreme poverty worldwide. The majority of my networking, reading, and traveling has centered around this mission. I want to be the most net-positive-impact person of my generation, and I believe I have insane potential to enhance for-profit entrepreneurship and education systems in low-income countries.</p>
+      <p>At 17 years old, I was luckily in the first graduating class of <a href="https://colossus.com/article/joe-liemandt-class-dismissed/" target="_blank" rel="noopener">Alpha School</a>, where I met amazing mentors, which I feel amazingly fortunate for. At 18 years old, I founded a <a href="https://www.singletracks.com/mtb-trails/station-mountain-bike-park-is-shutting-down-after-less-than-2-years-in" target="_blank" rel="noopener">bike park</a>. It failed. At 19 years old, I founded <a href="https://ridecased.com/" target="_blank" rel="noopener">Cased</a>, a clothing business. What I thought would be a 2 month prototyping process turned into 9 months – all funded on credit cards (my credit score is still absurdly low because of this lol). But, we got our first sale, and 13 months later, my awesome cofounder and I scaled Cased to $1.5m/mo in revenue on $600k raised.</p>
+      <p>Then, I gave Dylan some of my equity and left to go solve extreme poverty. It felt purposeful, but 3 months later, I <a href="https://www.benkuhn.net/abyss/" target="_blank" rel="noopener">stared at the abyss</a> and learned the hard way: If I truly want to maximize positive impact, since I have a real shot at becoming a billionaire with a non-impact-focused US-based business, I should go do that.</p>
+      <p class="rockefeller">Rockefeller, 1905: “God gave me my money. I believe the power to make money is a gift from God to be developed and used to the best of our ability for the good of mankind. Having been endowed with the gift I possess, I believe it is my duty to make money and still more money and to use the money I make for the good of my fellow man.”</p>
     </div>
   </section>
 
 </main>
 
+<footer class="v2-footer">
+  <a href="mailto:rhettiro@gmail.com">rhettiro@gmail.com</a>
+</footer>
+
 <script src="essays.js?v=5"></script>
-<script src="docs.js?v=5"></script>
 <script>
+(function () {
+
 /* ============================================================
-   ANSWER KEY — fill in "human" or "ai" for each of the 20 samples,
-   in the same order as the Google Doc (#01 … #20).
-   Leave null to just record the visitor's guess without grading.
+   ANSWER KEY - "human" or "ai" for each of the 20 samples,
+   in the order of the source Google Doc (#01 ... #20).
    ============================================================ */
 const ANSWER_KEY = [
-  "ai",    "human", "human", "ai",    "human", // 1–5
-  "human", "ai",    "human", "ai",    "human", // 6–10
-  "ai",    "human", "human", "ai",    "human", // 11–15
-  "ai",    "ai",    "ai",    "ai",    "ai",    // 16–20
+  "ai",    "human", "human", "ai",    "human", // 1-5
+  "human", "ai",    "human", "ai",    "human", // 6-10
+  "ai",    "human", "human", "ai",    "human", // 11-15
+  "ai",    "ai",    "ai",    "ai",    "ai",    // 16-20
 ];
 
-(function () {
+const TEST_MARKUP = `
+  <div class="test" aria-label="Turing test">
+    <div class="test-read">
+      <div class="test-bar"><span class="label sample-label">Sample 1/20</span></div>
+      <div class="essay" tabindex="0"><div class="essay-inner"></div></div>
+    </div>
+    <aside class="test-side">
+      <p class="q">Human or AI?</p>
+      <div class="verdicts">
+        <button class="verdict" type="button" data-guess="human">Human</button>
+        <button class="verdict" type="button" data-guess="ai">AI</button>
+      </div>
+      <div class="result" hidden>
+        <span class="result-title"></span>
+        <span class="result-sub"></span>
+      </div>
+      <div class="side-foot">
+        <div class="track" aria-label="Jump to sample"></div>
+        <button class="btn solid next" type="button" disabled>Next sample &rarr;</button>
+      </div>
+    </aside>
+  </div>`;
+
+function mountTest(host) {
   const essays = window.ESSAYS || [];
   const total = essays.length;
+  if (!total) return;
   const guesses = new Array(total).fill(null);
   let i = 0;
 
-  const $ = (id) => document.getElementById(id);
-  const inner = $("essay-inner"), scroller = $("essay");
-  const btnH = $("guess-human"), btnA = $("guess-ai");
-  const result = $("result"), rTitle = $("result-title"), rSub = $("result-sub");
-  const track = $("track"), next = $("next");
+  host.innerHTML = TEST_MARKUP;
+  const $ = (sel) => host.querySelector(sel);
+  const scroller = $(".essay"), inner = $(".essay-inner");
+  const btnH = host.querySelector('[data-guess="human"]');
+  const btnA = host.querySelector('[data-guess="ai"]');
+  const result = $(".result"), rTitle = $(".result-title"), rSub = $(".result-sub");
+  const track = $(".track"), next = $(".next"), label = $(".sample-label");
   const pad = (n) => String(n).padStart(2, "0");
 
   for (let k = 0; k < total; k++) {
     const c = document.createElement("button");
-    c.className = "cell"; c.type = "button"; c.textContent = pad(k + 1);
+    c.type = "button"; c.className = "cell"; c.textContent = pad(k + 1);
     c.setAttribute("aria-label", "Sample " + (k + 1));
     c.addEventListener("click", () => show(k));
     track.appendChild(c);
@@ -545,10 +656,9 @@ const ANSWER_KEY = [
 
   function show(k) {
     i = k;
-    const paras = essays[k];
-    inner.replaceChildren(...paras.map((t) => { const p = document.createElement("p"); p.textContent = t; return p; }));
+    inner.replaceChildren(...essays[k].map((t) => { const p = document.createElement("p"); p.textContent = t; return p; }));
     scroller.scrollTop = 0;
-    $("sample-label").textContent = "Sample " + (k + 1) + "/" + total;
+    label.textContent = "Sample " + (k + 1) + "/" + total;
     render();
   }
 
@@ -590,51 +700,10 @@ const ANSWER_KEY = [
   }));
   next.addEventListener("click", () => { if (i < total - 1) show(i + 1); });
 
-  if (total) show(0);
+  show(0);
+}
 
-  /* ---------- Humanizer vs. real writer boxes ---------- */
-  const DOCS = window.DOCS || {};
-  document.querySelectorAll(".duo-doc").forEach((slot) => {
-    slot.dataset.pair.split(",").forEach((key, col) => {
-      const d = DOCS[key.trim()];
-      if (!d) return;
-      const isAI = key.trim().startsWith("ai_");
-      const card = document.createElement("article");
-      card.className = "doc-card" + (isAI ? " is-ai" : "");
-
-      const body = document.createElement("div");
-      body.className = "doc-body";
-      body.hidden = true;
-      body.append(...d.paras.map((t) => { const p = document.createElement("p"); p.textContent = t; return p; }));
-
-      const title = document.createElement("button");
-      title.type = "button";
-      title.className = "doc-title";
-      title.setAttribute("aria-expanded", "false");
-      const label = document.createElement("span");
-      label.textContent = d.title;
-      const chev = document.createElement("span");
-      chev.className = "chev";
-      chev.textContent = "▾";
-      title.append(label, chev);
-
-      title.addEventListener("click", () => {
-        const open = card.classList.toggle("open");
-        body.hidden = !open;
-        title.setAttribute("aria-expanded", String(open));
-        if (open) body.scrollTop = 0;
-      });
-
-      card.append(title, body);
-      slot.appendChild(card);
-    });
-  });
-
-
-  /* ---------- Pangram screenshot fallback ---------- */
-  const img = $("pangram-img");
-  const fallback = () => { img.hidden = true; $("pangram-ph").hidden = false; };
-  if (img.complete && !img.naturalWidth) fallback(); else img.addEventListener("error", fallback);
+document.querySelectorAll("[data-test]").forEach(mountTest);
 
 })();
 </script>

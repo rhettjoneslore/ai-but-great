@@ -301,6 +301,8 @@
   @media (max-width: 620px) { .shots.slopgrid { column-count: 1; } }
   .shots .ph { aspect-ratio: 4 / 3; }
   .shots.one { grid-template-columns: 1fr; gap: 20px; }
+  .shots.pairalign { grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 900px) { .shots.pairalign { gap: 10px; } }
   .shots figure { margin: 0; }
   .applications { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 12px; }
   .subhead { font: 400 clamp(1.4rem, 2.4vw, 1.9rem)/1.2 var(--f-display); margin: 0; }
@@ -403,7 +405,7 @@
         </article>
       </div>
 
-      <div class="shots one">
+      <div class="shots pairalign">
         <figure class="shot"><img src="bridge-clemens-pass.webp" alt="GPTZero scan of the Clemens response: highly confident this text is entirely human, human 90%"></figure>
         <figure class="shot"><img src="bridge-opus-fail.webp" alt="GPTZero scan of the Opus 5 response: highly confident this text was AI generated, AI 100%"></figure>
       </div>
@@ -433,6 +435,8 @@
         <figure class="shot"><img src="slop-2.png" alt="LinkedIn comment proposing “E = mc² + AI”, with a one-word reply: “What”"></figure>
         <figure class="shot"><img src="slop-3.webp" alt="Barbershop website written like a developer tool: “The haircut layer for the modern head”"></figure>
         <figure class="shot"><img src="slop-4.png" alt="Substack post flagged by Pangram as 100% AI, under the line “The only AI I use is to correct my English”"></figure>
+        <figure class="shot"><img src="slop-5.webp" alt="Marketing card for an AI agent product: “The same moment — your call just ended. Both can write the follow-up.”"></figure>
+        <figure class="shot"><img src="slop-6.png" alt="Promoted LinkedIn post: “The hub-and-spoke model is holding SaaS back.”"></figure>
       </div>
 
       <p class="nda col">AI solved the Navier-Stokes existence and smoothness problem, yet AI cannot write a human-sounding email. What.</p>
@@ -529,8 +533,8 @@
         </div>
 
         <div class="qa-item">
-          <p class="qa-q">“Why don’t companies just take the available consumer product for $100, build an automated system themselves with their own developers to answer support emails, and avoid paying $7k/mo?”</p>
-          <p>Some will try. But the moment you're pushing 500+ emails/day through the consumer product, you’ll be paying $7k/mo in tokens anyway – and now you've also spent weeks of dev time building custom integrations, escalation logic, brand voice training, etc. Most companies will do the math and just buy the real thing.</p>
+          <p class="qa-q">“Why don’t companies just take the available consumer product for $100, build an automated system themselves with their own developers to answer support emails, and avoid paying $5k/mo?”</p>
+          <p>Some will try. But the moment you're pushing 500+ emails/day through the consumer product, you’ll be paying $5k/mo in tokens anyway – and now you've also spent weeks of dev time building custom integrations, escalation logic, brand voice training, etc. Most companies will do the math and just buy the real thing.</p>
         </div>
 
         <div class="qa-item">

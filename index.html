@@ -350,7 +350,6 @@
     content: ""; position: absolute; top: 0; right: 0; bottom: 18px; width: 90px;
     pointer-events: none; background: linear-gradient(to right, transparent, var(--paper));
   }
-  .scroll-hint { font: 600 0.8rem/1 var(--f-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
   .slop-rail { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 16px; scroll-snap-type: x proximity; scrollbar-color: var(--rule) transparent; }
   .slop-rail::-webkit-scrollbar { height: 10px; }
   .slop-rail::-webkit-scrollbar-track { background: var(--sunk); border-radius: 999px; }
@@ -383,7 +382,6 @@
   <section>
     <div class="stack-lg">
       <h2 class="col">AI slop…</h2>
-      <p class="scroll-hint">Scroll for more →</p>
       <div class="slop-wrap">
       <div class="slop-rail" tabindex="0">
         <figure><img src="slop-1.png" alt="AI customer support email from Pillow Cube about a late pillow"></figure>
@@ -490,16 +488,16 @@
   <a href="mailto:rhettiro@gmail.com">rhettiro@gmail.com</a>
 </footer>
 
-<script src="essays.js?v=7"></script>
+<script src="essays.js?v=8"></script>
 <script>
 (function () {
 
-const ANSWER_KEY = ["human", "ai", "human", "ai", "ai", "human", "ai", "human", "ai", "human", "ai", "human", "human", "ai", "human", "human", "ai", "human", "ai", "human", "ai", "human", "human", "ai", "human", "ai", "ai", "ai", "ai", "ai"];
+const ANSWER_KEY = ["human", "ai", "human", "ai", "ai", "ai", "human", "ai", "human", "ai", "human", "human", "ai", "human", "human", "human", "ai", "human", "human", "ai", "human", "ai", "ai", "ai", "ai"];
 
 const TEST_MARKUP = `
   <div class="test" aria-label="Turing test">
     <div class="test-read">
-      <div class="test-bar"><span class="label sample-label">Sample 1/30</span></div>
+      <div class="test-bar"><span class="label sample-label">Sample 1/25</span></div>
       <div class="essay" tabindex="0"><div class="essay-inner"></div></div>
     </div>
     <aside class="test-side">

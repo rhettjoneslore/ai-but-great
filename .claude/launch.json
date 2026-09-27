@@ -4,8 +4,24 @@
     {
       "name": "site",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["/Users/rhettjones/Documents/AI lore/ai-but-great/.claude/serve.py"],
+      "runtimeArgs": [
+        "/Users/rhettjones/Documents/AI lore/ai-but-great/.claude/serve.py"
+      ],
       "port": 5173
+    },
+    {
+      "name": "chat",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "/Users/rhettjones/Documents/AI lore/aibutgreat-chat",
+        "--",
+        "-p",
+        "3100"
+      ],
+      "port": 3100
     }
   ]
 }

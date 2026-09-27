@@ -81,6 +81,9 @@
 
   .wrap { max-width: var(--wide); margin-inline: auto; }
   .col { max-width: var(--narrow); }
+  @media (min-width: 1000px) {
+    :root { --wide: min(1440px, 75vw); --narrow: var(--wide); }
+  }
 
   /* ---------- Header ---------- */
   .top {
@@ -103,7 +106,7 @@
 
   /* ---------- Type ---------- */
   h1, h2 { font-family: var(--f-display); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: -0.015em; }
-  h1 { font-size: clamp(2.6rem, 6.4vw, 5.2rem); line-height: 1.02; max-width: 15ch; }
+  h1 { font-size: clamp(2.6rem, 6.4vw, 5.2rem); line-height: 1.02; }
   h2 { font-size: clamp(1.9rem, 3.6vw, 2.75rem); line-height: 1.12; }
   h2.long { font-size: clamp(1.6rem, 2.8vw, 2.15rem); line-height: 1.2; }
   p { margin: 0; text-wrap: pretty; }
@@ -248,8 +251,6 @@
   .duo-ph { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
 
-  .pull { font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.05; max-width: 20ch; }
-  .nda { font-size: clamp(1.15rem, 1.8vw, 1.35rem); max-width: 48ch; }
 
   /* ---------- Email calls to action ---------- */
   .top { flex-wrap: wrap; }
@@ -346,7 +347,6 @@
   .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
   .cta-row .btn { font-size: 1.05rem; padding: 16px 26px; }
   .link-pending { border-style: dashed; color: var(--ink-soft); cursor: default; }
-  .raise { font-size: clamp(1.15rem, 1.8vw, 1.35rem); max-width: 52ch; }
   main p a, main li a { color: var(--cobalt); text-decoration: underline; text-underline-offset: 2px; }
   .v3-footer { max-width: var(--wide); margin-inline: auto; padding-block: 48px 64px; border-top: 1px solid var(--rule); }
   .v3-footer a { font-family: var(--f-display); font-size: 1.25rem; color: var(--cobalt); text-decoration: none; }
@@ -445,14 +445,14 @@
         <p>Think beyond the AI-first tech industry – trucking companies, insurance agencies, property managers, etc. – once AI is good enough at certain areas, they'll switch all at once to a service that just does the work for them.</p>
         <p>Just like we'll handle all email CS for ecom brands or all Meta ad scriptwriting for ecom brands, we'll handle all quote requests for construction equipment dealers, or certificate of insurance requests for independent insurance agencies, or every RFQ for industrial parts distributors.</p>
         <p>With the previously mentioned pipeline and a (much less involved) human-in-the-loop, this product is just now buildable. Instead of paying for partial software, companies will pay for services that just do the job, and do it really well.</p>
-        <p class="raise">There is a $1T+ change coming to the services economy. AI that has full context and is really good at writing will dominate.</p>
+        <p>There is a $1T+ change coming to the services economy. AI that has full context and is really good at writing will dominate.</p>
       </div>
     </div>
   </section>
 
   <section>
     <div class="stack col">
-      <p class="raise">We're raising $4m at a $20m valuation. Most of it will go to annotators, ML engineers, a high-ticket B2B sales team, and mainly a crazy good data aggregation initiative (finding and building the best small datasets for every niche).</p>
+      <p>We're raising $4m at a $20m valuation. Most of it will go to annotators, ML engineers, a high-ticket B2B sales team, and mainly a crazy good data aggregation initiative (finding and building the best small datasets for every niche).</p>
       <p>Ask and we can show you the exact breakdown of how we’ll use the funds and how exactly this works on the backend.</p>
     </div>
   </section>

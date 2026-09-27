@@ -106,9 +106,8 @@
 
   /* ---------- Type ---------- */
   h1, h2 { font-family: var(--f-display); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: -0.015em; }
-  h1 { font-size: clamp(1.9rem, 3.4vw, 2.6rem); line-height: 1.1; }
-  h2 { font-size: clamp(1.9rem, 3.6vw, 2.75rem); line-height: 1.12; }
-  h2.long { font-size: clamp(1.6rem, 2.8vw, 2.15rem); line-height: 1.2; }
+  h1 { font-size: clamp(2rem, 3.4vw, 2.8rem); line-height: 1.12; }
+  h2 { font-size: clamp(2rem, 3.4vw, 2.8rem); line-height: 1.12; }
   p { margin: 0; text-wrap: pretty; }
   .lede { font-size: clamp(1.15rem, 1.8vw, 1.35rem); color: var(--ink-soft); }
   .label { font: 500 0.75rem/1.3 var(--f-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
@@ -295,7 +294,6 @@
 
   /* ---------- v2 ---------- */
   .sample-label { text-transform: none; letter-spacing: 0.01em; font-size: 0.82rem; }
-  .bigtitle { font-size: clamp(2.3rem, 4.6vw, 3.4rem); }
   .shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
   .shots.slopgrid { display: block; column-count: 2; column-gap: 14px; }
   .shots.slopgrid figure { break-inside: avoid; margin: 0 0 14px; }
@@ -327,7 +325,6 @@
   .sample-label { text-transform: none; letter-spacing: 0.01em; font-size: 0.82rem; }
   .shots.small { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; max-width: 860px; }
   .shots.small figure { margin: 0; }
-  .bigtitle { font-size: clamp(2.2rem, 4.4vw, 3.2rem); }
   .subhead { font: 400 clamp(1.4rem, 2.4vw, 1.9rem)/1.2 var(--f-display); margin: 0; }
   .pipeline { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 20px; counter-reset: step; }
   .pipeline li { display: grid; grid-template-columns: 34px 1fr; gap: 14px; align-items: start; }
@@ -365,7 +362,7 @@
 
   <section>
     <div class="stack-lg">
-      <h2 class="bigtitle col">It’s a slopfest out there!</h2>
+      <h2 class="col">It’s a slopfest out there!</h2>
       <div class="slop-rail" tabindex="0">
         <figure><img src="slop-1.png" alt="AI customer support email from Pillow Cube about a late pillow"></figure>
         <figure><img src="slop-2.png" alt="LinkedIn comment proposing “E = mc² + AI”, with a one-word reply: “What”"></figure>
@@ -379,7 +376,7 @@
 
   <section>
     <div class="stack-lg">
-      <h2 class="bigtitle col">Literally no AI writer has passed a Turing test until now. Take our Turing test here:</h2>
+      <h2 class="col">Literally no AI writer has passed a Turing test until now. Take our Turing test here:</h2>
       <div class="test-mount" data-test></div>
     </div>
   </section>
@@ -406,7 +403,7 @@
 
   <section>
     <div class="stack-lg">
-      <h2 class="long col">The hard part, more than just general humanization, is creating this pipeline:</h2>
+      <h2 class="col">The hard part, more than just general humanization, is creating this pipeline:</h2>
       <ol class="pipeline col">
         <li><span>Get the writing style from a small, top-quality dataset. Examples: 1) ~10k words of your own writing, or 2) a top-performing brand’s Meta ad scripts, or 3) quotes from a produce distributor.</span></li>
         <li><span>Get full context on the project. Examples: 1) everything on your computer, or 2) the brand's website and past ads, or 3) the produce distributor’s entire quote history and software.</span></li>
@@ -417,7 +414,7 @@
 
   <section>
     <div class="stack-lg">
-      <h2 class="bigtitle col">Here’s what we’re building:</h2>
+      <h2 class="col">Here’s what we’re building:</h2>
       <div class="stack col">
         <p>The core consumer product will be a generalist ChatGPT-style chatbot that doesn't sound like AI.</p>
         <p>Then, there's a pro consumer version that uses the same pipeline. You can pick from 100+ voices, each trained on a small, really good dataset (e.g. a Meta ads scriptwriting voice trained on ~10k words of the best Meta ad scripts, or an outbound email voice trained on the highest-converting pre-AI cold emails). Or, it can write like yourself if you give it a corpus of your own writing.</p>
@@ -429,7 +426,7 @@
 
   <section>
     <div class="stack-lg">
-      <h2 class="bigtitle col">B2B:</h2>
+      <h2 class="col">B2B:</h2>
       <div class="stack col">
         <p>The initial niche product (before we go broad) is done-for-you email customer service for online brands (built with the above pipeline).</p>
         <p>Cased (my previous company) uses an okay AI email service but still pays 6 full-time people to fill in the many gaps. Cased would easily pay $5k+/mo to just get 100% of their emails off their hands and done better than their best humans, instead using services like Intercom which, though helpful, only handle ~60% of emails and aren’t even as good as than the humans.</p>
@@ -440,7 +437,7 @@
 
   <section>
     <div class="stack-lg">
-      <h2 class="bigtitle col">Why this can be a massive company:</h2>
+      <h2 class="col">Why this can be a massive company:</h2>
       <div class="stack col">
         <p>Think beyond the AI-first tech industry – trucking companies, insurance agencies, property managers, etc. – once AI is good enough at certain areas, they'll switch all at once to a service that just does the work for them.</p>
         <p>Just like we'll handle all email CS for ecom brands or all Meta ad scriptwriting for ecom brands, we'll handle all quote requests for construction equipment dealers, or certificate of insurance requests for independent insurance agencies, or every RFQ for industrial parts distributors.</p>

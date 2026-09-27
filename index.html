@@ -4,6 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI But Great</title>
+<meta name="description" content="AI that writes exactly like the best human in any niche. We pass AI detectors and a 30-sample Turing test.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI But Great">
+<meta property="og:description" content="AI that writes exactly like the best human in any niche. We pass AI detectors and a 30-sample Turing test.">
+<meta property="og:image" content="pangram-result.png">
+<meta property="og:image:alt" content="Pangram scan grading a 475-word essay as human written with high confidence">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI But Great">
+<meta name="twitter:description" content="AI that writes exactly like the best human in any niche. We pass AI detectors and a 30-sample Turing test.">
+<meta name="twitter:image" content="pangram-result.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
@@ -335,7 +345,17 @@
     background: var(--sunk); color: var(--ink);
   }
 
-  .slop-rail { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 14px; scroll-snap-type: x proximity; scrollbar-color: var(--rule) transparent; }
+  .slop-wrap { position: relative; }
+  .slop-wrap::after {
+    content: ""; position: absolute; top: 0; right: 0; bottom: 18px; width: 90px;
+    pointer-events: none; background: linear-gradient(to right, transparent, var(--paper));
+  }
+  .scroll-hint { font: 600 0.8rem/1 var(--f-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+  .slop-rail { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 16px; scroll-snap-type: x proximity; scrollbar-color: var(--rule) transparent; }
+  .slop-rail::-webkit-scrollbar { height: 10px; }
+  .slop-rail::-webkit-scrollbar-track { background: var(--sunk); border-radius: 999px; }
+  .slop-rail::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 999px; }
+  .slop-rail::-webkit-scrollbar-thumb:hover { background: var(--ink-soft); }
   .slop-rail figure { margin: 0; flex: none; scroll-snap-align: start; }
   .slop-rail img { height: 340px; width: auto; max-width: none; border: 1px solid var(--rule); border-radius: 6px; }
   @media (max-width: 620px) { .slop-rail img { height: 240px; } }
@@ -362,7 +382,9 @@
 
   <section>
     <div class="stack-lg">
-      <h2 class="col">It’s a slopfest out there!</h2>
+      <h2 class="col">AI slop…</h2>
+      <p class="scroll-hint">Scroll for more →</p>
+      <div class="slop-wrap">
       <div class="slop-rail" tabindex="0">
         <figure><img src="slop-1.png" alt="AI customer support email from Pillow Cube about a late pillow"></figure>
         <figure><img src="slop-2.png" alt="LinkedIn comment proposing “E = mc² + AI”, with a one-word reply: “What”"></figure>
@@ -370,6 +392,7 @@
         <figure><img src="slop-4.png" alt="Substack post flagged by Pangram as 100% AI"></figure>
         <figure><img src="slop-5.webp" alt="Marketing card for an AI agent product: “The same moment”"></figure>
         <figure><img src="slop-6.png" alt="Promoted LinkedIn post: “The hub-and-spoke model is holding SaaS back.”"></figure>
+      </div>
       </div>
     </div>
   </section>

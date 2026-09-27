@@ -382,6 +382,7 @@
   .lede-big { font-size: clamp(1.3rem, 2.1vw, 1.7rem); line-height: 1.45; color: var(--ink); }
   .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
   .cta-row .btn { font-size: 1.05rem; padding: 16px 26px; }
+  .link-pending { border-style: dashed; color: var(--ink-soft); cursor: default; }
   main p a, main li a { color: var(--cobalt); text-decoration: underline; text-underline-offset: 2px; }
   .v3-footer { max-width: var(--wide); margin-inline: auto; padding-block: 48px 64px; }
   .v3-footer a { font-family: var(--f-display); font-size: 1.25rem; color: var(--cobalt); text-decoration: none; }
@@ -430,7 +431,7 @@
       </div>
       <div class="cta-row col">
         <p class="lede" style="margin:0">Our beta chatbot is live here:</p>
-        <a class="btn solid" href="https://aibutgreat-chat.vercel.app/" target="_blank" rel="noopener">aibutgreat-chat.vercel.app</a>
+        <span class="btn link-pending">&lt;link&gt;</span>
       </div>
     </div>
   </section>

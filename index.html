@@ -349,6 +349,8 @@
   }
 
   .showcase { position: relative; padding-bottom: clamp(24px, 3vw, 40px); }
+  .band { background: var(--band); border-bottom: 1px solid var(--rule); margin-inline: -20px; padding-inline: 20px; }
+  .showcase { padding-bottom: clamp(24px, 3vw, 40px); }
   .showcase section { padding-block: clamp(26px, 3.2vw, 44px); }
   .showcase section:first-child { padding-top: clamp(30px, 3.6vw, 48px); }
   .showcase .stack-lg { gap: 22px; }
@@ -388,14 +390,14 @@
 </head>
 <body>
 
-<header class="top">
+
+<div class="band">
+  <header class="top">
   <a class="mark" href="#">AI <em>But</em> Great</a>
   <a class="top-cta" href="mailto:rhettiro@gmail.com">Email me questions or to join the waitlist: <span>rhettiro@gmail.com</span></a>
 </header>
 
-<main class="wrap">
-
-  <div class="showcase">
+  <main class="wrap showcase">
   <section>
     <div class="stack-lg">
       <h2 class="col">AI slop…</h2>
@@ -433,7 +435,10 @@
       </div>
     </div>
   </section>
-  </div>
+  </main>
+</div>
+
+<main class="wrap">
 
   <section class="memo-start">
     <div class="stack col">
@@ -523,7 +528,6 @@ const TEST_MARKUP = `
       <div class="essay" tabindex="0"><div class="essay-inner"></div></div>
     </div>
     <aside class="test-side">
-      <p class="q">Human or AI?</p>
       <div class="verdicts">
         <button class="verdict" type="button" data-guess="human">Human</button>
         <button class="verdict" type="button" data-guess="ai">AI</button>

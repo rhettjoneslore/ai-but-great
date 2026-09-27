@@ -19,7 +19,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Hanken+Grotesk:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
 <style>
   :root {
-    --paper: #EDEFEA;
+    --paper: #FFFFFF;
+    --band: #ECEEEA;
     --surface: #F8F9F6;
     --sunk: #E2E5DE;
     --ink: #15181D;
@@ -43,6 +44,8 @@
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --paper: #111316;
+    --band: #1A1D21;
+      --band: #1A1D21;
       --surface: #1A1D21;
       --sunk: #22262B;
       --ink: #E8EAE5;
@@ -345,10 +348,25 @@
     background: var(--sunk); color: var(--ink);
   }
 
+  .showcase { position: relative; padding-bottom: clamp(24px, 3vw, 40px); }
+  .showcase section { padding-block: clamp(26px, 3.2vw, 44px); }
+  .showcase section:first-child { padding-top: clamp(30px, 3.6vw, 48px); }
+  .showcase .stack-lg { gap: 22px; }
+
+  .showcase::before {
+    content: ""; position: absolute; z-index: -1;
+    top: calc(-1 * clamp(24px, 4vw, 48px)); bottom: 0;
+    left: calc(50% - 50vw); width: 100vw;
+    background: var(--band);
+    border-bottom: 1px solid var(--rule);
+  }
+  .memo-start { padding-top: clamp(56px, 7vw, 96px); }
+  .memo-mark { font: 400 clamp(1.7rem, 3vw, 2.4rem)/1 var(--f-display); letter-spacing: 0.02em; color: var(--ink-soft); margin-bottom: 6px; }
+  body { overflow-x: hidden; }
   .slop-wrap { position: relative; }
   .slop-wrap::after {
     content: ""; position: absolute; top: 0; right: 0; bottom: 18px; width: 90px;
-    pointer-events: none; background: linear-gradient(to right, transparent, var(--paper));
+    pointer-events: none; background: linear-gradient(to right, transparent, var(--band));
   }
   .slop-rail { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 16px; scroll-snap-type: x proximity; scrollbar-color: var(--rule) transparent; }
   .slop-rail::-webkit-scrollbar { height: 10px; }
@@ -377,8 +395,7 @@
 
 <main class="wrap">
 
-
-
+  <div class="showcase">
   <section>
     <div class="stack-lg">
       <h2 class="col">AI slop…</h2>
@@ -414,11 +431,15 @@
         <p class="lede" style="margin:0">Our beta chatbot is live here:</p>
         <span class="btn link-pending">&lt;link&gt;</span>
       </div>
+    </div>
+  </section>
+  </div>
 
-      <div class="stack col pitch-line">
+  <section class="memo-start">
+    <div class="stack col">
+        <p class="memo-mark">Memo</p>
         <h1>Imagine AI that writes exactly like the best human in any niche with 100% accuracy.</h1>
         <p class="lede-big">Frontier AI models are JUST starting to get good enough to build on. With the right system prompts, harnesses, datasets and ML work, it’s within possibility to make Opus 5.5 write exactly like a human and stay completely accurate. This wasn't even possible in August.</p>
-      </div>
     </div>
   </section>
 
@@ -440,7 +461,7 @@
         <p>The core consumer product will be a generalist ChatGPT-style chatbot that doesn't sound like AI.</p>
         <p>Then, there's a pro consumer version that uses the same pipeline. You can pick from 100+ voices, each trained on a small, really good dataset (e.g. a Meta ads scriptwriting voice trained on ~10k words of the best Meta ad scripts, or an outbound email voice trained on the highest-converting pre-AI cold emails). Or, it can write like yourself if you give it a corpus of your own writing.</p>
         <p>Then, there’s a one-click-install agent (unlike others, its super easy – Terminal or a tech background is not needed) that pulls full context on you / your business from your computer, in a non-security-breaching way, into an optionally constantly updated doc that you and the AI can both read from. With this context and with the style datasets, AI writing can finally be great.</p>
-        <p><strong>Why consumer:</strong> Going viral makes us the "AI that sounds human" brand which makes B2B sales cook. As a first mover, we'll undoubtedly win distribution with an ecom-style campaign for consumer and a high-ticket-sales-style campaign for B2B.</p>
+        <p>Why consumer: Going viral makes us the "AI that sounds human" brand which makes B2B sales cook. As a first mover, we'll undoubtedly win distribution with an ecom-style campaign for consumer and a high-ticket-sales-style campaign for B2B.</p>
       </div>
     </div>
   </section>
@@ -478,7 +499,8 @@
   <section>
     <div class="stack col">
       <h2>About me:</h2>
-      <p>I'm Rhett. I was in the first graduating class of <a href="https://colossus.com/article/joe-liemandt-class-dismissed/" target="_blank" rel="noopener">Alpha School</a>, and at 19 I founded <a href="https://ridecased.com/" target="_blank" rel="noopener">Cased</a>, which my cofounder and I scaled to $1.5m/mo in revenue on $600k raised. My life goal is to eliminate extreme poverty, and I believe the way I do the most good is building a huge US company first. On Sep 1 I left my previous business to go all-in on this opportunity with a few friends, which I've put $20k of my own money into since.</p>
+      <p>I'm Rhett. I was in the first graduating class of Alpha School, and at 19 I founded <a href="https://ridecased.com/" target="_blank" rel="noopener">Cased</a>, which my cofounder and I scaled to $1.5m/mo in revenue on $600k raised. My life goal is to eliminate extreme poverty, and I believe the way I do the most good is building a huge US company first. On Sep 1 I left my previous business to go all-in on this opportunity with a few friends, which I've put $20k of my own money into since.</p>
+      <p>You can read more about me <a href="https://rhettjones.carrd.co/" target="_blank" rel="noopener">here</a>.</p>
     </div>
   </section>
 

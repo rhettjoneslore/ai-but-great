@@ -349,7 +349,7 @@
   }
 
   .showcase { position: relative; padding-bottom: clamp(24px, 3vw, 40px); }
-  .band { background: var(--band); border-bottom: 1px solid var(--rule); margin-inline: -20px; padding-inline: 20px; }
+  .band { background: var(--band); border-top: 1px solid var(--rule); margin-inline: -20px; padding-inline: 20px; }
   .showcase { padding-bottom: clamp(24px, 3vw, 40px); }
   .showcase section { padding-block: clamp(26px, 3.2vw, 44px); }
   .showcase section:first-child { padding-top: clamp(30px, 3.6vw, 48px); }
@@ -385,7 +385,7 @@
   .link-pending { border-style: dashed; color: var(--ink-soft); cursor: default; }
   main p a, main li a { color: var(--cobalt); text-decoration: underline; text-underline-offset: 2px; }
   .v3-footer { max-width: var(--wide); margin-inline: auto; padding-block: 48px 64px; }
-  .v3-footer a { font-family: var(--f-display); font-size: 1.25rem; color: var(--cobalt); text-decoration: none; }
+  .v3-footer a { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 14px; color: var(--ink); text-decoration: none; }
 
   /* ---------- memo: plain document look ---------- */
   .memo, .memo h1, .memo h2, .memo p, .memo li, .memo a, .memo .memo-mark, .memo .lede-big, .memo .lede {
@@ -397,7 +397,7 @@
   }
   .memo h1, .memo h2, .memo .memo-mark { font-weight: 700; margin: 0; text-wrap: initial; }
   .memo section { padding-block: 0; }
-  .memo .memo-start { padding-top: clamp(26px, 3vw, 40px); }
+  .memo .memo-start { padding-top: clamp(30px, 3.5vw, 48px); }
   .memo .stack, .memo .stack-lg { gap: 12px; }
   .memo .memo-mark { margin-bottom: 16px; }
   .memo .pipeline { display: block; padding-left: 26px; list-style: decimal; counter-reset: none; }
@@ -412,52 +412,6 @@
 <body>
 
 
-<div class="band">
-  <header class="top">
-  <a class="mark" href="#">AI <em>But</em> Great</a>
-  <a class="top-cta" href="mailto:rhettiro@gmail.com">Email me questions or to join the waitlist: <span>rhettiro@gmail.com</span></a>
-</header>
-
-  <main class="wrap showcase">
-  <section>
-    <div class="stack-lg">
-      <h2 class="col">AI slop…</h2>
-      <div class="slop-wrap">
-      <div class="slop-rail" tabindex="0">
-                <figure><img src="slop-2.png" alt="LinkedIn comment proposing “E = mc² + AI”, with a one-word reply: “What”"></figure>
-        <figure><img src="slop-3.webp" alt="Barbershop website written like a developer tool: “The haircut layer for the modern head”"></figure>
-        <figure><img src="slop-4.png" alt="Substack post flagged by Pangram as 100% AI"></figure>
-        <figure><img src="slop-5.webp" alt="Marketing card for an AI agent product: “The same moment”"></figure>
-        <figure><img src="slop-6.png" alt="Promoted LinkedIn post: “The hub-and-spoke model is holding SaaS back.”"></figure>
-        <figure><img src="slop-1.png" alt="AI customer support email from Pillow Cube about a late pillow"></figure>
-      </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="stack-lg">
-      <h2 class="col">Literally no AI writer has passed a Turing test until now. Take our Turing test here (MVP):</h2>
-      <div class="test-mount" data-test></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="stack-lg">
-      <h2 class="col">We also fully pass AI detectors:</h2>
-      <div class="shots small">
-        <figure class="shot"><img src="pangram-result.png" alt="Pangram scan: 475 words, graded Human Written with high confidence"></figure>
-        <figure class="shot"><img src="detector-zerogpt.png" alt="ZeroGPT scan: 0% AI GPT, “Your Text is Human written”"></figure>
-        <figure class="shot"><img src="detector-gptzero.webp" alt="GPTZero scan: highly confident this text is entirely human"></figure>
-      </div>
-      <div class="cta-row col">
-        <p class="lede" style="margin:0;color:var(--ink)">Our beta chatbot is live here:</p>
-        <span class="btn link-pending">&lt;link&gt;</span>
-      </div>
-    </div>
-  </section>
-  </main>
-</div>
 
 <main class="wrap memo">
 
@@ -526,6 +480,53 @@
   </section>
 
 </main>
+
+<div class="band">
+  <main class="wrap showcase">
+
+  <section>
+    <div class="stack-lg">
+      <h2 class="col">Literally no AI writer has passed a Turing test until now. Take our Turing test here (MVP):</h2>
+      <div class="test-mount" data-test></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="stack-lg">
+      <h2 class="col">We also fully pass AI detectors:</h2>
+      <div class="shots small">
+        <figure class="shot"><img src="pangram-result.png" alt="Pangram scan: 475 words, graded Human Written with high confidence"></figure>
+        <figure class="shot"><img src="detector-zerogpt.png" alt="ZeroGPT scan: 0% AI GPT, “Your Text is Human written”"></figure>
+        <figure class="shot"><img src="detector-gptzero.webp" alt="GPTZero scan: highly confident this text is entirely human"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section>
+      <div class="cta-row col">
+        <p class="lede" style="margin:0;color:var(--ink)">Our beta chatbot is live here:</p>
+        <span class="btn link-pending">&lt;link&gt;</span>
+      </div>
+  </section>
+
+  <section>
+    <div class="stack-lg">
+      <h2 class="col">AI slop…</h2>
+      <div class="slop-wrap">
+      <div class="slop-rail" tabindex="0">
+                <figure><img src="slop-2.png" alt="LinkedIn comment proposing “E = mc² + AI”, with a one-word reply: “What”"></figure>
+        <figure><img src="slop-3.webp" alt="Barbershop website written like a developer tool: “The haircut layer for the modern head”"></figure>
+        <figure><img src="slop-4.png" alt="Substack post flagged by Pangram as 100% AI"></figure>
+        <figure><img src="slop-5.webp" alt="Marketing card for an AI agent product: “The same moment”"></figure>
+        <figure><img src="slop-6.png" alt="Promoted LinkedIn post: “The hub-and-spoke model is holding SaaS back.”"></figure>
+        <figure><img src="slop-1.png" alt="AI customer support email from Pillow Cube about a late pillow"></figure>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+</div>
 
 <footer class="v3-footer">
   <a href="mailto:rhettiro@gmail.com">rhettiro@gmail.com</a>

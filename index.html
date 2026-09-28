@@ -348,20 +348,12 @@
     background: var(--sunk); color: var(--ink);
   }
 
-  .showcase { position: relative; padding-bottom: clamp(24px, 3vw, 40px); }
-  .band { background: var(--band); border-top: 1px solid var(--rule); margin-inline: -20px; padding-inline: 20px; }
+  .band { background: var(--band); margin-inline: -20px; padding-inline: 20px; }
   .showcase { padding-bottom: clamp(24px, 3vw, 40px); }
   .showcase section { padding-block: clamp(26px, 3.2vw, 44px); }
   .showcase section:first-child { padding-top: clamp(30px, 3.6vw, 48px); }
   .showcase .stack-lg { gap: 22px; }
 
-  .showcase::before {
-    content: ""; position: absolute; z-index: -1;
-    top: calc(-1 * clamp(24px, 4vw, 48px)); bottom: 0;
-    left: calc(50% - 50vw); width: 100vw;
-    background: var(--band);
-    border-bottom: 1px solid var(--rule);
-  }
   .memo-start { padding-top: clamp(30px, 3.6vw, 48px); }
   .memo-mark { font: 400 clamp(1.7rem, 3vw, 2.4rem)/1 var(--f-display); letter-spacing: 0.02em; color: var(--ink-soft); margin-bottom: 20px; }
   body { overflow-x: hidden; }
@@ -385,8 +377,6 @@
   .cta-row .btn { font-size: 1.05rem; padding: 16px 26px; }
   .link-pending { border-style: dashed; color: var(--ink-soft); cursor: default; }
   main p a, main li a { color: var(--cobalt); text-decoration: underline; text-underline-offset: 2px; }
-  .v3-footer { max-width: var(--wide); margin-inline: auto; padding-block: 48px 64px; }
-  .v3-footer a { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 14px; color: var(--ink); text-decoration: none; }
 
   /* ---------- memo: plain document look ---------- */
   .memo, .memo h1, .memo h2, .memo p, .memo li, .memo a, .memo .memo-mark, .memo .lede-big, .memo .lede {
@@ -478,6 +468,7 @@
     <div class="stack col">
       <h2>About me:</h2>
       <p>I'm Rhett. I was in the first graduating class of Alpha School, and at 19 I founded <a href="https://ridecased.com/" target="_blank" rel="noopener">Cased</a>, which my cofounder and I scaled to $1.5m/mo in 13 months on $600k raised. My life goal is to eliminate extreme poverty, and I believe the way I do the most good is building a huge US company first. On Sep 1 I left my previous business to go all-in on this opportunity with a few friends, which I've put $20k of my own money into since. You can read more about me <a href="https://rhettjones.carrd.co/" target="_blank" rel="noopener">here</a>.</p>
+      <p><a href="mailto:rhettiro@gmail.com">rhettiro@gmail.com</a></p>
     </div>
   </section>
 
@@ -530,9 +521,6 @@
   </main>
 </div>
 
-<footer class="v3-footer">
-  <a href="mailto:rhettiro@gmail.com">rhettiro@gmail.com</a>
-</footer>
 
 <script src="essays.js?v=9"></script>
 <script>

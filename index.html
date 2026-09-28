@@ -386,6 +386,27 @@
   main p a, main li a { color: var(--cobalt); text-decoration: underline; text-underline-offset: 2px; }
   .v3-footer { max-width: var(--wide); margin-inline: auto; padding-block: 48px 64px; }
   .v3-footer a { font-family: var(--f-display); font-size: 1.25rem; color: var(--cobalt); text-decoration: none; }
+
+  /* ---------- memo: plain document look ---------- */
+  .memo, .memo h1, .memo h2, .memo p, .memo li, .memo a, .memo .memo-mark, .memo .lede-big, .memo .lede {
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    letter-spacing: 0;
+    color: var(--ink);
+  }
+  .memo h1, .memo h2, .memo .memo-mark { font-weight: 700; margin: 0; text-wrap: initial; }
+  .memo section { padding-block: 0; }
+  .memo .memo-start { padding-top: clamp(26px, 3vw, 40px); }
+  .memo .stack, .memo .stack-lg { gap: 12px; }
+  .memo .memo-mark { margin-bottom: 16px; }
+  .memo .pipeline { display: block; padding-left: 26px; list-style: decimal; counter-reset: none; }
+  .memo .pipeline li { display: list-item; margin-bottom: 8px; }
+  .memo .pipeline li::before { content: none; }
+  .memo .applications { padding-left: 26px; list-style: disc; gap: 0; display: block; }
+  .memo .applications li { margin-bottom: 8px; }
+  .memo section + section { margin-top: 18px; }
+  .memo h2 { margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -430,7 +451,7 @@
         <figure class="shot"><img src="detector-gptzero.webp" alt="GPTZero scan: highly confident this text is entirely human"></figure>
       </div>
       <div class="cta-row col">
-        <p class="lede" style="margin:0">Our beta chatbot is live here:</p>
+        <p class="lede" style="margin:0;color:var(--ink)">Our beta chatbot is live here:</p>
         <span class="btn link-pending">&lt;link&gt;</span>
       </div>
     </div>
@@ -438,7 +459,7 @@
   </main>
 </div>
 
-<main class="wrap">
+<main class="wrap memo">
 
   <section class="memo-start">
     <div class="stack col">
@@ -499,7 +520,7 @@
   <section>
     <div class="stack col">
       <h2>About me:</h2>
-      <p>I'm Rhett. I was in the first graduating class of Alpha School, and at 19 I founded <a href="https://ridecased.com/" target="_blank" rel="noopener">Cased</a>, which my cofounder and I scaled to $1.5m/mo in revenue on $600k raised. My life goal is to eliminate extreme poverty, and I believe the way I do the most good is building a huge US company first. On Sep 1 I left my previous business to go all-in on this opportunity with a few friends, which I've put $20k of my own money into since. You can read more about me <a href="https://rhettjones.carrd.co/" target="_blank" rel="noopener">here</a>.</p>
+      <p>I'm Rhett. I was in the first graduating class of Alpha School, and at 19 I founded <a href="https://ridecased.com/" target="_blank" rel="noopener">Cased</a>, which my cofounder and I scaled to $1.5m/mo in revenue in 13 months. My life goal is to eliminate extreme poverty, and I believe the way I do the most good is building a huge US company first. On Sep 1 I left my previous business to go all-in on this opportunity with a few friends, which I've put $20k of my own money into since. You can read more about me <a href="https://rhettjones.carrd.co/" target="_blank" rel="noopener">here</a>.</p>
     </div>
   </section>
 

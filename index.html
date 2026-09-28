@@ -380,7 +380,8 @@
   @media (max-width: 620px) { .slop-rail img { height: 240px; } }
   .pitch-line { margin-top: clamp(28px, 5vw, 56px); gap: 26px; }
   .lede-big { font-size: clamp(1.3rem, 2.1vw, 1.7rem); line-height: 1.45; color: var(--ink); }
-  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+  .cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+  .cta-row h2 { margin: 0; }
   .cta-row .btn { font-size: 1.05rem; padding: 16px 26px; }
   .link-pending { border-style: dashed; color: var(--ink-soft); cursor: default; }
   main p a, main li a { color: var(--cobalt); text-decoration: underline; text-underline-offset: 2px; }
@@ -397,6 +398,7 @@
   }
   .memo h1, .memo h2, .memo .memo-mark { font-weight: 700; margin: 0; text-wrap: initial; }
   .memo section { padding-block: 0; }
+  .memo { padding-bottom: clamp(48px, 6vw, 88px); }
   .memo .memo-start { padding-top: clamp(30px, 3.5vw, 48px); }
   .memo .stack, .memo .stack-lg { gap: 12px; }
   .memo .memo-mark { margin-bottom: 16px; }
@@ -504,7 +506,7 @@
 
   <section>
       <div class="cta-row col">
-        <p class="lede" style="margin:0;color:var(--ink)">Our beta chatbot is live here:</p>
+        <h2>Our beta chatbot is live here:</h2>
         <span class="btn link-pending">&lt;link&gt;</span>
       </div>
   </section>

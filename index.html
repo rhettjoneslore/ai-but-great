@@ -153,7 +153,6 @@
     overflow: hidden;
   }
   .test-read { display: flex; flex-direction: column; min-width: 0; border-right: 1px solid var(--rule); }
-  #sample-label { text-transform: none; letter-spacing: 0.01em; font-size: 0.82rem; }
   .test-bar {
     display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap;
     padding: 16px 28px; border-bottom: 1px solid var(--rule);
@@ -306,7 +305,6 @@
   }
 
   /* ---------- v2 ---------- */
-  .sample-label { text-transform: none; letter-spacing: 0.01em; font-size: 0.82rem; }
   .shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: start; }
   .shots.slopgrid { display: block; column-count: 2; column-gap: 14px; }
   .shots.slopgrid figure { break-inside: avoid; margin: 0 0 14px; }
@@ -335,7 +333,6 @@
   .v2-footer a:hover { text-decoration: underline; }
 
   /* ---------- v3 ---------- */
-  .sample-label { text-transform: none; letter-spacing: 0.01em; font-size: 0.82rem; }
   .shots.small { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; max-width: 860px; }
   .shots.small figure { margin: 0; }
   .subhead { font: 400 clamp(1.4rem, 2.4vw, 1.9rem)/1.2 var(--f-display); margin: 0; }
@@ -479,50 +476,18 @@
 
   <section>
     <div class="stack-lg">
-      <h2 class="col">Literally no AI writer has passed a Turing test until now. Take our Turing test here (MVP):</h2>
       <div class="test-mount" data-test></div>
     </div>
   </section>
 
-  <section>
-    <div class="stack-lg">
-      <h2 class="col">We also fully pass AI detectors:</h2>
-      <div class="shots small">
-        <figure class="shot"><img src="pangram-result.png" alt="Pangram scan: 475 words, graded Human Written with high confidence"></figure>
-        <figure class="shot"><img src="detector-zerogpt.png" alt="ZeroGPT scan: 0% AI GPT, “Your Text is Human written”"></figure>
-        <figure class="shot"><img src="detector-gptzero.webp" alt="GPTZero scan: highly confident this text is entirely human"></figure>
-      </div>
-    </div>
-  </section>
 
-  <section>
-      <div class="cta-row col">
-        <h2>Our beta chatbot is live here:</h2>
-        <span class="btn link-pending">&lt;link&gt;</span>
-      </div>
-  </section>
 
-  <section>
-    <div class="stack-lg">
-      <h2 class="col">AI slop…</h2>
-      <div class="slop-wrap">
-      <div class="slop-rail" tabindex="0">
-                <figure><img src="slop-2.png" alt="LinkedIn comment proposing “E = mc² + AI”, with a one-word reply: “What”"></figure>
-        <figure><img src="slop-3.webp" alt="Barbershop website written like a developer tool: “The haircut layer for the modern head”"></figure>
-        <figure><img src="slop-4.png" alt="Substack post flagged by Pangram as 100% AI"></figure>
-        <figure><img src="slop-5.webp" alt="Marketing card for an AI agent product: “The same moment”"></figure>
-        <figure><img src="slop-6.png" alt="Promoted LinkedIn post: “The hub-and-spoke model is holding SaaS back.”"></figure>
-        <figure><img src="slop-1.png" alt="AI customer support email from Pillow Cube about a late pillow"></figure>
-      </div>
-      </div>
-    </div>
-  </section>
 
   </main>
 </div>
 
 
-<script src="essays.js?v=9"></script>
+<script src="essays.js?v=10"></script>
 <script>
 (function () {
 
@@ -531,7 +496,6 @@ const ANSWER_KEY = ["human", "human", "ai", "ai", "human", "ai", "human", "ai", 
 const TEST_MARKUP = `
   <div class="test" aria-label="Turing test">
     <div class="test-read">
-      <div class="test-bar"><span class="label sample-label">Sample 1/23</span></div>
       <div class="essay" tabindex="0"><div class="essay-inner"></div></div>
     </div>
     <aside class="test-side">
@@ -563,7 +527,7 @@ function mountTest(host) {
   const btnH = host.querySelector('[data-guess="human"]');
   const btnA = host.querySelector('[data-guess="ai"]');
   const result = $(".result"), rTitle = $(".result-title"), rSub = $(".result-sub");
-  const track = $(".track"), next = $(".next"), label = $(".sample-label");
+  const track = $(".track"), next = $(".next");
   const pad = (n) => String(n).padStart(2, "0");
 
   for (let k = 0; k < total; k++) {
@@ -578,7 +542,6 @@ function mountTest(host) {
     i = k;
     inner.replaceChildren(...essays[k].map((t) => { const p = document.createElement("p"); p.textContent = t; return p; }));
     scroller.scrollTop = 0;
-    label.textContent = "Sample " + (k + 1) + "/" + total;
     render();
   }
 

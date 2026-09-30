@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin · AI But Great</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F5F1E8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Caveat:wght@600&display=swap">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<header id="masthead" data-compact="1"></header>
+
+<main class="wrap" style="padding-top:24px;padding-bottom:40px">
+  <p class="kicker">Back office</p>
+  <h1 class="h-section">Admin</h1>
+  <p class="dek" data-dev="REAL: every /api/admin/* route checks role === 'admin' on the server. This demo has no gate.">Look up users, change prices, export contacts, edit what's on the homepage. <span class="mono">(Demo: fake users, no login gate.)</span></p>
+  <div class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-tab="users" aria-selected="true">Users</button>
+    <button role="tab" data-tab="pricing">Pricing</button>
+    <button role="tab" data-tab="contacts">Contacts</button>
+    <button role="tab" data-tab="content">Content</button>
+    <button role="tab" data-tab="numbers">Numbers</button>
+  </div>
+  <div id="pane"></div>
+</main>
+
+<script src="content/examples.js?v=6"></script>
+<script src="content/videos.js?v=6"></script>
+<script src="js/formats.js?v=6"></script>
+<script src="js/mock-api.js?v=6"></script>
+<script src="js/common.js?v=6"></script>
+<script>
+(function () {
+  const api = ABG.api, A = api.admin, ui = ABG.ui, esc = ABG_FORMATS.esc;
+  const pane = document.getElementById('pane');
+  const fmtDate = (t) => t ? new Date(t).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—';
+  const planPill = (e, spent) => e.lifetime ? '<span class="pill ink">lifetime</span>' : e.passActive ? `<span class="pill ink">${e.autoRenew ? 'weekly' : 'pass'}</span>` : e.pastDue ? '<span class="pill red">past due</span>' : spent ? '<span class="pill">lapsed</span>' : '<span class="pill">free</span>';
+
+  document.getElementById('tabs').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-tab]'); if (!b) return;
+    document.querySelectorAll('#tabs button').forEach((x) => x.setAttribute('aria-selected', x === b));
+    TABS[b.dataset.tab]();
+  });
+
+  /* ------------------------------------------------------------ USERS */
+  async function users(q = '') {
+    const list = await A.listUsers(q);
+    pane.innerHTML = `<div class="panel">
+      <input class="input" id="uq" placeholder="Search name or email" value="${esc(q)}" style="margin-bottom:12px">
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>User</th><th>Source</th><th>Plan</th><th>Spent</th><th>Words</th><th>Joined</th></tr></thead><tbody>
+      ${list.map((u) => `<tr class="click" data-u="${u.id}"><td><b>${esc(u.name)}</b><br><span class="mono muted">${esc(u.email)}</span></td><td>${u.source}</td><td>${planPill(u.ent, u.spent)}</td><td>${ui.money(u.spent)}</td><td>${u.wordsWritten.toLocaleString()}</td><td>${fmtDate(u.createdAt)}</td></tr>`).join('')}
+      </tbody></table></div></div>`;
+    const uq = document.getElementById('uq');
+    let t; uq.oninput = () => { clearTimeout(t); t = setTimeout(async () => { await users(uq.value); const n = document.getElementById('uq'); n.focus(); n.setSelectionRange(n.value.length, n.value.length); }, 250); };
+    pane.querySelectorAll('[data-u]').forEach((r) => r.onclick = () => userDetail(r.dataset.u));
+  }
+
+  async function userDetail(id) {
+    const d = await A.getUser(id);
+    const u = d.user, e = d.ent;
+    const m = ui.modal(`<p class="label">User</p><h2>${esc(u.name)}</h2><p class="mono muted" style="margin-top:0">${esc(u.email)} · ${u.id}</p>
+      <h3 class="label" style="margin-top:16px">Access</h3>
+      <dl class="kv"><dt>Plan</dt><dd>${planPill(e, d.spent)}</dd><dt>Lifetime</dt><dd>${e.lifetime ? 'yes' : 'no'}</dd>
+        <dt>Pass ends</dt><dd>${e.passEndsAt ? new Date(e.passEndsAt).toLocaleString() : '—'}</dd><dt>Auto-renew</dt><dd>${e.autoRenew ? 'on' : 'off'}</dd>
+        <dt>Bonus free</dt><dd>${e.freeLeft}</dd><dt>Paid responses</dt><dd>${e.singleCredits}</dd></dl>
+      <h3 class="label" style="margin-top:16px">Usage</h3>
+      <dl class="kv"><dt>Responses</dt><dd>${u.responses}</dd><dt>Words</dt><dd>${u.wordsWritten.toLocaleString()}</dd><dt>Spent</dt><dd>${ui.money(d.spent)}</dd>
+        <dt>$ per 3,000 words</dt><dd>${u.wordsWritten ? ui.money(d.spent / (u.wordsWritten / 3000)) : '—'}</dd><dt>Chats</dt><dd>${d.conversations}</dd>
+        <dt>Source</dt><dd>${u.source}</dd><dt>Price version</dt><dd>${u.priceVariant || 'A'}</dd><dt>Email opt-in</dt><dd>${u.marketingOptIn ? 'yes' : 'no'}</dd><dt>SMS opt-in</dt><dd>${u.smsOptIn ? 'yes · ' + esc(u.phone) : 'no'}</dd></dl>
+      <h3 class="label" style="margin-top:16px">Purchases</h3>
+      ${d.purchases.length ? `<div class="tbl-wrap"><table class="tbl"><tbody>${d.purchases.map((p) => `<tr><td>${fmtDate(p.createdAt)}</td><td>${p.plan}</td><td>${ui.money(p.amount)}</td><td><span class="pill ${p.status === 'refunded' ? '' : p.status === 'failed' ? 'red' : 'ink'}">${p.status}</span></td>
+        <td>${p.status === 'paid' ? `<button class="btn btn-sm" data-refund="${p.id}" data-dev="Refund → stripe.refunds.create. Access is removed when the charge.refunded webhook lands.">Refund</button>` : ''}</td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">None.</p>'}
+      <h3 class="label" style="margin-top:16px">Give free stuff</h3>
+      <div class="row-inline" style="align-items:flex-end">
+        <label class="field" style="flex:1"><span>Free responses</span><input class="input" type="number" min="0" value="0" id="g-free"></label>
+        <label class="field" style="flex:1"><span>Pass days</span><input class="input" type="number" min="0" value="0" id="g-days"></label>
+      </div>
+      <label class="check"><input type="checkbox" id="g-life"> Give lifetime access</label>
+      <button class="btn btn-red" id="g-go">Grant</button>`, { wide: true });
+    m.el.querySelectorAll('[data-refund]').forEach((b) => b.onclick = async () => {
+      if (!confirm('Refund this payment through Stripe?')) return;
+      await A.refund(b.dataset.refund); m.close(); ui.toast('Refunded'); userDetail(id); users(document.getElementById('uq') ? document.getElementById('uq').value : '');
+    });
+    m.el.querySelector('#g-go').onclick = async () => {
+      await A.grant(id, { freeResponses: +m.el.querySelector('#g-free').value || 0, passDays: +m.el.querySelector('#g-days').value || 0, lifetime: m.el.querySelector('#g-life').checked });
+      m.close(); ui.toast('Granted'); users();
+    };
+  }
+
+  /* ------------------------------------------------------------ PRICING */
+  async function pricing() {
+    const c = await A.getConfig();
+    const row = (v) => `<div class="panel"><h2>Version ${v}${v === 'A' ? ' <span class="mono muted" style="font-size:12px">(default)</span>' : ''}</h2>
+      <div class="row-inline">${['lifetime', 'pass7', 'weekly', 'single'].map((k) => `<label class="field" style="flex:1;min-width:120px"><span>${api.PLANS[k].name}</span><input class="input" type="number" step="0.01" min="0" data-p="${v}.${k}" value="${c.prices[v][k]}"></label>`).join('')}</div></div>`;
+    pane.innerHTML = `
+      <p class="dek" data-dev="Settings table. Checkout reads price from here for the user's assigned version. Assignment is random on first visit and sticky forever (stored on the visitor, then on the user).">Prices live here, not in code. Change them any time. Lifetime always shows first on the payment screen.</p>
+      ${row('A')}${row('B')}
+      <div class="panel"><h2>Price test</h2>
+        <label class="check"><input type="checkbox" id="pt-on" ${c.priceTest.enabled ? 'checked' : ''}> Run the test (new visitors are split between A and B)</label>
+        <label class="field"><span>Share of new visitors who see B: <b id="pt-v">${c.priceTest.splitB}%</b></span><input type="range" min="0" max="100" id="pt-split" value="${c.priceTest.splitB}" style="width:100%;accent-color:var(--red)"></label>
+        <p class="mono muted" style="margin:0">People already assigned keep their version every visit. Compare "money per visitor" by version in PostHog.</p>
+      </div>
+      <div class="panel"><h2>Limits</h2><div class="row-inline">
+        <label class="field" style="flex:1"><span>Free responses</span><input class="input" type="number" id="l-free" value="${c.freeResponses}"></label>
+        <label class="field" style="flex:1"><span>Referral bonus (each)</span><input class="input" type="number" id="l-ref" value="${c.referralBonus}"></label>
+        <label class="field" style="flex:1"><span>Max per minute</span><input class="input" type="number" id="l-min" value="${c.limits.perMinute}"></label>
+        <label class="field" style="flex:1"><span>Max per day (paid)</span><input class="input" type="number" id="l-day" value="${c.limits.perDay}"></label>
+      </div></div>
+      <button class="btn btn-red" id="save">Save prices</button>`;
+    document.getElementById('pt-split').oninput = (e) => document.getElementById('pt-v').textContent = e.target.value + '%';
+    document.getElementById('save').onclick = async () => {
+      const prices = JSON.parse(JSON.stringify(c.prices));
+      pane.querySelectorAll('[data-p]').forEach((i) => { const [v, k] = i.dataset.p.split('.'); prices[v][k] = +i.value; });
+      await A.setConfig({ prices, priceTest: { enabled: document.getElementById('pt-on').checked, splitB: +document.getElementById('pt-split').value },
+        freeResponses: +document.getElementById('l-free').value, referralBonus: +document.getElementById('l-ref').value,
+        limits: { perMinute: +document.getElementById('l-min').value, perDay: +document.getElementById('l-day').value } });
+      ui.toast('Saved. Live on the next page load.');
+    };
+  }
+
+  /* ------------------------------------------------------------ CONTACTS */
+  let cf = {};
+  async function contacts() {
+    const rows = await A.contacts(cf);
+    const sel = (id, opts, val) => `<select class="input" id="${id}" style="flex:1;min-width:140px">${opts.map(([v, l]) => `<option value="${v}" ${v === (val || '') ? 'selected' : ''}>${l}</option>`).join('')}</select>`;
+    pane.innerHTML = `<div class="panel">
+      <p class="dek" data-dev="Our DB is the master list. Same filters exist in Loops. Export = CSV of the filtered rows, including SMS consent time + IP.">Everyone who signed in. Filter, then export. Example: <button class="link" id="ex">paid, came from TikTok</button>.</p>
+      <div class="row-inline" style="margin-bottom:10px">
+        ${sel('f-source', [['', 'Any source'], ['tiktok', 'TikTok'], ['instagram', 'Instagram'], ['google', 'Google'], ['referral', 'Referral'], ['direct', 'Direct']], cf.source)}
+        ${sel('f-plan', [['', 'Any plan'], ['paid', 'Paid anything'], ['lifetime', 'Lifetime'], ['weekly', 'Weekly'], ['pass', 'Pass'], ['lapsed', 'Lapsed'], ['free', 'Free']], cf.plan)}
+      </div>
+      <label class="check" style="display:inline-flex;margin-right:16px"><input type="checkbox" id="f-email" ${cf.emailOptIn ? 'checked' : ''}> Email opt-in only</label>
+      <label class="check" style="display:inline-flex"><input type="checkbox" id="f-sms" ${cf.smsOptIn ? 'checked' : ''}> SMS opt-in only</label>
+      <div class="row-inline" style="align-items:center;margin:6px 0 12px"><b style="flex:1">${rows.length} contacts</b><button class="btn btn-red btn-sm" id="csv">Export CSV</button></div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Name</th><th>Email</th><th>Source</th><th>Plan</th><th>Spent</th><th>Email</th><th>SMS</th><th>Signed up</th></tr></thead><tbody>
+      ${rows.map((r) => `<tr><td>${esc(r.name)}</td><td class="mono">${esc(r.email)}</td><td>${r.source}</td><td>${r.plan}</td><td>${ui.money(r.totalSpent)}</td><td>${r.emailOptIn ? '✓' : ''}</td><td>${r.smsOptIn ? '✓' : ''}</td><td>${r.signup}</td></tr>`).join('')}
+      </tbody></table></div></div>`;
+    const upd = () => { cf = { source: document.getElementById('f-source').value, plan: document.getElementById('f-plan').value, emailOptIn: document.getElementById('f-email').checked, smsOptIn: document.getElementById('f-sms').checked }; contacts(); };
+    ['f-source', 'f-plan', 'f-email', 'f-sms'].forEach((id) => document.getElementById(id).onchange = upd);
+    document.getElementById('ex').onclick = () => { cf = { source: 'tiktok', plan: 'paid' }; contacts(); };
+    document.getElementById('csv').onclick = () => {
+      if (!rows.length) return ui.toast('Nothing to export');
+      const cols = Object.keys(rows[0]);
+      const csv = [cols.join(',')].concat(rows.map((r) => cols.map((k) => '"' + String(r[k]).replace(/"/g, '""') + '"').join(','))).join('\n');
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'contacts.csv'; a.click();
+    };
+  }
+
+  /* ------------------------------------------------------------ CONTENT */
+  async function content(sub = 'examples') {
+    const exOverride = await A.getContent('examples');
+    const examples = exOverride || ABG_EXAMPLES;
+    const vidOverride = await A.getContent('videos');
+    const videos = vidOverride || ABG_VIDEOS;
+    const subnav = `<div class="filters">${[['examples', 'Showcase'], ['videos', 'Videos'], ['posts', 'Archive posts']].map(([k, l]) => `<button class="chip" data-sub="${k}" aria-pressed="${k === sub}">${l}</button>`).join('')}</div>`;
+    let body = '';
+    if (sub === 'examples') {
+      body = `<p class="dek" data-dev="REAL: a CMS (or the examples file in git). Order = homepage order. The first 6 are what most people see.">${examples.length} examples. The first 6 are the strongest; most people never scroll past them. ${exOverride ? '<button class="link" id="reset-ex">Reset to the file version</button>' : ''}</p>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Prompt</th><th>Category</th><th>Format</th><th></th></tr></thead><tbody>
+        ${examples.map((x, i) => `<tr><td>${i + 1}${i < 6 ? ' ★' : ''}</td><td>${esc(x.prompt.slice(0, 80))}${x.prompt.length > 80 ? '…' : ''}</td><td>${x.cat}</td><td>${x.format}</td>
+          <td style="white-space:nowrap"><button class="btn btn-sm btn-ghost" data-mv="${i}:-1" ${i === 0 ? 'disabled' : ''}>↑</button><button class="btn btn-sm btn-ghost" data-mv="${i}:1" ${i === examples.length - 1 ? 'disabled' : ''}>↓</button><button class="btn btn-sm" data-ed="${i}">Edit</button></td></tr>`).join('')}
+        </tbody></table></div>`;
+    } else if (sub === 'videos') {
+      body = `<p class="dek">Paste the Mux or Cloudflare Stream URL, plus the original TikTok/Instagram link so views count there too.</p>
+        ${videos.map((v, i) => `<div class="panel"><b>${esc(v.title)}</b> <span class="mono muted">${v.date}</span>
+          <div class="row-inline" style="margin-top:8px"><input class="input mono" data-vs="${i}.src" placeholder="Video URL (Mux / Cloudflare)" value="${esc(v.src || '')}"><input class="input mono" data-vs="${i}.tiktok" placeholder="TikTok link" value="${esc(v.tiktok || '')}"></div></div>`).join('')}
+        <button class="btn btn-red" id="save-v">Save videos</button>`;
+    } else {
+      const posts = await fetch('posts/index.json').then((r) => r.json()).catch(() => []);
+      body = `<p class="dek" data-dev="REAL: posts are markdown files. Build step renders each to /archive/{slug} (static HTML, own URL, meta tags) and adds it to sitemap.xml.">Posts are markdown files in <span class="mono">site/posts/</span>, listed in <span class="mono">posts/index.json</span>. Anyone can add one: copy the template, fill it in, save.</p>
+        <div class="panel">${posts.map((p) => `<div style="padding:6px 0;border-bottom:1px solid var(--rule)"><a href="post.html?p=${p.slug}">${esc(p.title)}</a> <span class="mono muted">${p.type} · ${p.date}</span></div>`).join('')}</div>
+        <div class="panel"><h2>New post template</h2><pre class="mono" style="white-space:pre-wrap;margin:0">---
+title: Your headline
+type: news        # news (satire) or wiki (encyclopedia)
+date: 2026-10-01
+dek: One-line subhead (news only)
+prompt: The exact prompt we gave the AI
+info.Date: 2031   # wiki only: infobox rows start with "info."
+---
+
+Body in markdown. ## for section headings.
+No real people in satire. Ever.</pre></div>`;
+    }
+    pane.innerHTML = subnav + body;
+    pane.querySelectorAll('[data-sub]').forEach((b) => b.onclick = () => content(b.dataset.sub));
+    const reset = document.getElementById('reset-ex'); if (reset) reset.onclick = async () => { await A.setContent('examples', null); content('examples'); };
+    pane.querySelectorAll('[data-mv]').forEach((b) => b.onclick = async () => {
+      const [i, d] = b.dataset.mv.split(':').map(Number); const arr = examples.slice();
+      [arr[i], arr[i + d]] = [arr[i + d], arr[i]]; await A.setContent('examples', arr); content('examples');
+    });
+    pane.querySelectorAll('[data-ed]').forEach((b) => b.onclick = () => editExample(examples, +b.dataset.ed));
+    const sv = document.getElementById('save-v');
+    if (sv) sv.onclick = async () => {
+      const arr = JSON.parse(JSON.stringify(videos));
+      pane.querySelectorAll('[data-vs]').forEach((inp) => { const [i, k] = inp.dataset.vs.split('.'); arr[i][k] = inp.value.trim() || null; });
+      await A.setContent('videos', arr); ui.toast('Saved');
+    };
+  }
+  function editExample(examples, i) {
+    const x = examples[i];
+    const m = ui.modal(`<h2>Edit example</h2>
+      <label class="field"><span>Prompt (write it the way a real person types)</span><textarea class="input" rows="3" id="e-prompt">${esc(x.prompt)}</textarea></label>
+      <div class="row-inline"><label class="field" style="flex:1"><span>Category</span><select class="input" id="e-cat">${['work', 'personal', 'school', 'social', 'creative'].map((c) => `<option ${c === x.cat ? 'selected' : ''}>${c}</option>`).join('')}</select></label>
+      <label class="field" style="flex:1"><span>Seconds to write</span><input class="input" type="number" step="0.1" id="e-sec" value="${x.seconds}"></label></div>
+      <label class="field"><span>Red-pen note (optional)</span><input class="input" id="e-note" value="${esc(x.note || '')}"></label>
+      <label class="field"><span>Output (${x.format} format, JSON)</span><textarea class="input mono" rows="8" id="e-out">${esc(JSON.stringify(x.output, null, 2))}</textarea></label>
+      <label class="field"><span>What ChatGPT wrote</span><textarea class="input" rows="4" id="e-gpt">${esc(x.chatgpt || '')}</textarea></label>
+      <p class="err hidden" id="e-err"></p><button class="btn btn-red" id="e-save">Save</button>`, { wide: true });
+    m.el.querySelector('#e-save').onclick = async () => {
+      let out; try { out = JSON.parse(m.el.querySelector('#e-out').value); } catch (e) { const er = m.el.querySelector('#e-err'); er.textContent = 'Output isn\'t valid JSON.'; er.classList.remove('hidden'); return; }
+      const arr = JSON.parse(JSON.stringify(examples));
+      Object.assign(arr[i], { prompt: m.el.querySelector('#e-prompt').value.trim(), cat: m.el.querySelector('#e-cat').value, seconds: +m.el.querySelector('#e-sec').value,
+        note: m.el.querySelector('#e-note').value.trim() || undefined, output: out, chatgpt: m.el.querySelector('#e-gpt').value });
+      await A.setContent('examples', arr); m.close(); ui.toast('Saved. Check the homepage.'); content('examples');
+    };
+  }
+
+  /* ------------------------------------------------------------ NUMBERS */
+  async function numbers() {
+    const u = await A.unitEconomics();
+    const ok = u.per3000 >= 1;
+    pane.innerHTML = `<div class="stats">
+        <div class="stat"><div class="n">${ui.money(u.revenue)}</div><div class="l">revenue (paid, not refunded)</div></div>
+        <div class="stat"><div class="n">${Math.round(u.words).toLocaleString()}</div><div class="l">words written</div></div>
+        <div class="stat"><div class="n" style="color:${ok ? 'var(--ok)' : 'var(--red)'}">${ui.money(u.per3000)}</div><div class="l">revenue per 3,000 words (target: $1)</div></div>
+        <div class="stat"><div class="n">${ok ? 'On target' : 'Below'}</div><div class="l">vs. $1 per 3,000 words</div></div>
+      </div>
+      <div class="panel" data-dev="These three live in PostHog, not here. Stripe payments are sent into PostHog so money sits next to behavior.">
+        <h2>Dashboards (in PostHog)</h2>
+        <ol style="margin:0;padding-left:20px;line-height:1.8">
+          <li><b>The full funnel</b>, split by where people came from: landed → typed first prompt → got first response → saw sign-in → signed in → got responses 2 and 3 → saw payment screen → clicked an option → started checkout → paid → bought again.</li>
+          <li><b>Money per visitor</b> for each price version (A vs B).</li>
+          <li><b>30-day money per user</b> for auto-renew.</li>
+        </ol>
+      </div>`;
+  }
+
+  const TABS = { users, pricing, contacts, content, numbers };
+  users();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Archive · AI But Great</title>
+<meta name="description" content="Written by our AI.">
+<meta property="og:type" content="article">
+<meta name="theme-color" content="#F5F1E8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Caveat:wght@600&display=swap">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<header id="masthead" data-compact="1" data-current="archive"></header>
+
+<main class="wrap">
+  <article class="article" id="post" data-dev="REAL: prerender at build time to /archive/{slug} with its own <title>, description and og:image. This demo fetches the .md in the browser, which Google handles poorly."></article>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="js/formats.js?v=6"></script>
+<script src="js/markdown.js?v=6"></script>
+<script src="js/mock-api.js?v=6"></script>
+<script src="js/common.js?v=6"></script>
+<script>
+(async function () {
+  const esc = ABG_FORMATS.esc;
+  const el = document.getElementById('post');
+  const slug = new URLSearchParams(location.search).get('p') || '';
+  if (!/^[a-z0-9-]+$/.test(slug)) { el.innerHTML = '<p>Post not found. <a href="archive.html">Back to the Archive</a></p>'; return; }
+  let src;
+  try { const r = await fetch('posts/' + slug + '.md'); if (!r.ok) throw 0; src = await r.text(); }
+  catch (e) { el.innerHTML = '<p>Post not found. <a href="archive.html">Back to the Archive</a></p>'; return; }
+  const { meta, html } = ABG_MD.parse(src);
+  document.title = meta.title + ' · AI But Great';
+  document.querySelector('meta[name=description]').content = meta.dek || meta.title;
+  const date = new Date(meta.date + 'T12:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const banner = `<div class="ai-banner"><b>Our AI wrote this.</b> The prompt we used:<br>“${esc(meta.prompt || '')}”</div>`;
+
+  if (meta.type === 'wiki') {
+    const info = Object.keys(meta).filter((k) => k.startsWith('info.'));
+    el.innerHTML = banner + `<div class="wiki">
+      <h1>${esc(meta.title)}</h1>
+      <div class="from">From Otherpedia, the encyclopedia of things that haven't happened yet</div>
+      ${info.length ? `<table class="infobox"><caption>${esc(meta.title)}</caption><tr><td colspan="2" style="padding:0"><div class="img">[ image ]</div></td></tr>
+        ${info.map((k) => `<tr><th>${esc(k.slice(5))}</th><td>${esc(meta[k])}</td></tr>`).join('')}</table>` : ''}
+      <div class="prose">${html}</div>
+      <p class="mono" style="color:#54595d;margin-top:28px;clear:both">This page is fiction written by AI But Great. It is not affiliated with any real encyclopedia.</p>
+    </div>`;
+  } else {
+    el.innerHTML = banner + `<div class="news">
+      <span class="satire">SATIRE</span>
+      <h1>${esc(meta.title)}</h1>
+      ${meta.dek ? `<p class="dek">${esc(meta.dek)}</p>` : ''}
+      <div class="byline">By the AI But Great News Desk (an AI) · ${date}</div>
+      <div class="prose">${html}</div>
+      <p class="mono muted" style="margin-top:28px;border-top:1px solid var(--rule);padding-top:12px">Satire. Written by AI. Every person and quote in it is made up.</p>
+    </div>`;
+  }
+  el.insertAdjacentHTML('beforeend', `<div class="row-inline" style="margin-top:24px"><a class="btn" href="archive.html">← The Archive</a><button class="btn btn-red" id="sh">Copy link</button></div>`);
+  document.getElementById('sh').onclick = () => { ABG.ui.copy(location.href); ABG.api.track('shared_post', { slug }); };
+})();
+</script>
+</body>
+</html>

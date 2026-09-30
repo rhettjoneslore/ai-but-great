@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI But Great · Writing that doesn't sound like AI</title>
+<meta name="description" content="Texts, emails, essays and speeches that sound like a person wrote them. 3 free responses, no card needed.">
+<link rel="canonical" href="https://aibutgreat.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI But Great">
+<meta property="og:description" content="Writing that doesn't sound like AI. 3 free responses, no card needed.">
+<meta property="og:image" content="https://aibutgreat.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F5F1E8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Caveat:wght@600&display=swap">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<header id="masthead"></header>
+
+<main>
+  <!-- =============================================================== HERO -->
+  <section class="hero" id="top">
+    <div class="wrap hero-inner">
+      <div style="position:relative">
+        <span class="pen right" aria-hidden="true">this line goes hard</span>
+        <p class="kicker">Today's edition</p>
+        <h1>AI writing that doesn't <em>sound like AI.</em></h1>
+      </div>
+      <div id="hero-slot">
+        <form class="hero-box" id="hero-form" data-dev="Enter starts the chat right here (hero swaps to the chat box). First response needs no account. POST /api/generate.">
+          <label for="hero-input">What do you need written?</label>
+          <textarea id="hero-input" rows="3" autocomplete="off"></textarea>
+          <div class="row">
+            <span class="mono muted">Enter to write</span>
+            <button class="btn btn-red" type="submit">Write it</button>
+          </div>
+        </form>
+        <p class="hero-note" id="hero-note"><strong>3 free responses.</strong> No card needed. <button class="link mono" id="see-prices" type="button">See prices</button></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================== SHOWCASE -->
+  <section class="section" id="showcase">
+    <div class="wrap">
+      <p class="kicker">The Showcase</p>
+      <h2 class="h-section">Twenty things people actually need written.</h2>
+      <p class="dek">Real prompts, typed the way people type. Every answer shown the way it'd actually be sent.</p>
+      <div class="filters" id="filters" role="toolbar" aria-label="Filter examples"></div>
+      <div class="grid" id="grid" data-dev="Examples come from content/examples.js (or the admin override). First 6 = strongest. Phones: swipe row. ≥900px: grid."></div>
+      <p class="swipe-hint">swipe for more →</p>
+    </div>
+  </section>
+
+  <!-- ============================================================= VIDEOS -->
+  <section class="section" id="videos">
+    <div class="wrap">
+      <p class="kicker">Now Playing</p>
+      <h2 class="h-section">The sketches.</h2>
+      <p class="dek">Hover to watch on a computer. On your phone they play as you scroll. Tap for sound.</p>
+      <div class="vgrid" id="vgrid" data-dev="Host on Mux or Cloudflare Stream (content/videos.js → src, poster). Desktop: play muted on hover. Phone: play muted when 60% in view. Tap: unmute + fullscreen. Newest first."></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ ARCHIVE -->
+  <section class="section" id="archive">
+    <div class="wrap">
+      <p class="kicker">The Archive</p>
+      <h2 class="h-section">Things our AI wrote for fun.</h2>
+      <p class="dek">Encyclopedia pages from futures that haven't happened, and news about us that definitely didn't. <a href="archive.html">See all →</a></p>
+      <div class="cols" id="stories"></div>
+    </div>
+  </section>
+
+  <!-- ========================================================= CLASSIFIED -->
+  <section class="section">
+    <div class="wrap">
+      <div class="classified" id="sms" data-dev="SMS opt-in. Save phone, exact consent text, timestamp, IP (server-side). Send via Twilio. Never text without this record.">
+        <h3>20% off, by text.</h3>
+        <p class="muted" style="margin:0 0 12px">Leave your number and we'll text you a code.</p>
+        <form id="sms-form">
+          <div class="row-inline"><input class="input" type="tel" id="sms-phone" placeholder="(555) 123-4567" autocomplete="tel" required><button class="btn btn-red" type="submit">Text me the code</button></div>
+          <label class="check"><input type="checkbox" id="sms-consent"> <span id="sms-consent-text">Yes, text me marketing messages from AI But Great, about 2 to 4 a month. Agreeing isn't required to buy anything. Msg and data rates may apply. Reply STOP to opt out, HELP for help.</span></label>
+          <p class="err hidden" id="sms-err"></p>
+        </form>
+        <p class="hidden" id="sms-done" style="font-size:18px;margin:0">Sent. Your code is <b class="mono" style="font-size:18px">TEXT20</b>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="content/examples.js?v=6"></script>
+<script src="content/videos.js?v=6"></script>
+<script src="js/formats.js?v=6"></script>
+<script src="js/mock-api.js?v=6"></script>
+<script src="js/common.js?v=6"></script>
+<script src="js/chat.js?v=6"></script>
+<script>
+(function () {
+  const api = ABG.api, ui = ABG.ui, F = ABG_FORMATS, esc = F.esc;
+  const $ = (s) => document.querySelector(s);
+  let chat = null;
+
+  /* ---------------- hero ---------------- */
+  const input = $('#hero-input');
+  let pi = 0;
+  const setPh = () => { input.placeholder = 'e.g. ' + ABG_PLACEHOLDERS[pi++ % ABG_PLACEHOLDERS.length]; };
+  setPh(); setInterval(() => { if (!input.value) setPh(); }, 2800);
+
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); startChat(); } });
+  $('#hero-form').addEventListener('submit', (e) => { e.preventDefault(); startChat(); });
+  $('#see-prices').onclick = () => ui.paywallModal();
+
+  function startChat() {
+    const text = input.value.trim();
+    if (!text) { input.focus(); return; }
+    $('#hero-form').remove(); $('#hero-note').remove();
+    $('#top').classList.add('chatting');
+    chat = ABG.Chat.mount($('#hero-slot'), {});
+    chat.send(text);
+  }
+
+  async function heroNote() {
+    const me = await api.me();
+    const note = $('#hero-note'); if (!note) return;
+    const e = me.ent;
+    if (e.hasAccess || e.freeLeft < me.config.freeResponses) {
+      const c = ui.counter(e);
+      note.innerHTML = `<strong>${esc(c.text)}.</strong> ${e.hasAccess ? 'Write as much as you want.' : ''} <button class="link mono" id="see-prices" type="button">See prices</button>`;
+      $('#see-prices').onclick = () => ui.paywallModal();
+    }
+  }
+  heroNote(); window.addEventListener('abg:state', heroNote);
+
+  /* ---------------- showcase ---------------- */
+  const examples = api.content.examples();
+  let filter = 'all';
+  $('#filters').innerHTML = ABG_CATEGORIES.map((c) => `<button class="chip" data-f="${c.id}" aria-pressed="${c.id === 'all'}">${c.label}</button>`).join('');
+  $('#filters').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-f]'); if (!b) return;
+    filter = b.dataset.f;
+    document.querySelectorAll('#filters .chip').forEach((x) => x.setAttribute('aria-pressed', x === b));
+    renderGrid();
+    api.track('filtered_showcase', { category: filter });
+  });
+
+  function card(ex) {
+    const words = F.words(F.plainText(ex));
+    return `<article class="card" data-id="${ex.id}">
+      ${ex.note ? `<span class="pen" aria-hidden="true">${esc(ex.note)}</span>` : ''}
+      <div class="card-prompt"><div class="who">They typed</div><p>“${esc(ex.prompt)}”</p></div>
+      <div class="card-out" data-out>${F.render(ex)}</div>
+      <div class="card-foot">
+        <span class="meta">${words} words · written in ${ex.seconds.toFixed(1)}s</span>
+        <button class="btn btn-sm btn-ghost" data-read>Read full</button>
+        ${ex.chatgpt ? '<button class="btn btn-sm btn-ghost" data-gpt>See what ChatGPT wrote</button>' : ''}
+        <span class="spacer"></span>
+        <button class="btn btn-sm btn-red" data-try>Try this</button>
+      </div>
+    </article>`;
+  }
+  function renderGrid() {
+    const list = examples.filter((x) => filter === 'all' || x.cat === filter);
+    $('#grid').innerHTML = list.map(card).join('');
+    $('#grid').scrollLeft = 0;
+  }
+  renderGrid();
+
+  $('#grid').addEventListener('click', (e) => {
+    const c = e.target.closest('.card'); if (!c) return;
+    const ex = examples.find((x) => x.id === c.dataset.id);
+    if (e.target.closest('[data-read]')) {
+      c.classList.toggle('open');
+      e.target.textContent = c.classList.contains('open') ? 'Show less' : 'Read full';
+      if (c.classList.contains('open')) api.track('read_full_example', { id: ex.id });
+    }
+    if (e.target.closest('[data-gpt]')) {
+      const on = c.classList.toggle('gpt');
+      c.querySelector('[data-out]').innerHTML = on
+        ? `<span class="gpt-tag">ChatGPT · same prompt</span><div class="gpt-text">${esc(ex.chatgpt)}</div>`
+        : F.render(ex);
+      e.target.textContent = on ? 'See ours' : 'See what ChatGPT wrote';
+      if (on) api.track('viewed_chatgpt_compare', { id: ex.id });
+    }
+    if (e.target.closest('[data-try]')) {
+      api.track('clicked_try_this', { id: ex.id });
+      if (chat) {
+        const ci = document.querySelector('#hero-slot [data-input]');
+        ci.value = ex.prompt; ci.dispatchEvent(new Event('input'));
+      } else { input.value = ex.prompt; }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => (chat ? document.querySelector('#hero-slot [data-input]') : input).focus({ preventScroll: true }), 450);
+    }
+  });
+
+  /* ---------------- videos ---------------- */
+  const vids = api.content.videos().slice().sort((a, b) => b.date.localeCompare(a.date));
+  const canHover = matchMedia('(hover: hover)').matches;
+  $('#vgrid').innerHTML = vids.map((v) => `<div class="vcard" id="video-${v.id}">
+      <button class="vframe" data-v="${v.id}" aria-label="Play: ${esc(v.title)}">
+        ${v.src ? `<video muted playsinline loop preload="none" ${v.poster ? `poster="${v.poster}"` : ''} src="${v.src}"></video>`
+          : `<div class="ph"><span class="s">VIDEO PLACEHOLDER · 9:16</span><span class="t">${esc(v.title)}</span><span class="s">Mux / Cloudflare Stream URL goes in content/videos.js</span></div>`}
+        <span class="state" data-state>${canHover ? 'hover to play' : 'scroll to play'}</span>
+      </button>
+      <div class="vmeta"><div class="t">${esc(v.title)}</div>
+        <div class="links">${v.tiktok ? `<a href="${v.tiktok}" rel="noopener" target="_blank">TikTok ↗</a>` : ''}${v.instagram ? `<a href="${v.instagram}" rel="noopener" target="_blank">Instagram ↗</a>` : ''}<button data-share-v="${v.id}">Share link</button></div>
+      </div></div>`).join('');
+
+  function setPlaying(frame, on) {
+    const v = frame.querySelector('video');
+    frame.classList.toggle('playing', on);
+    frame.querySelector('[data-state]').textContent = on ? '▶ playing · muted' : (canHover ? 'hover to play' : 'scroll to play');
+    if (v) { if (on) v.play().catch(() => {}); else v.pause(); }
+  }
+  document.querySelectorAll('.vframe').forEach((f) => {
+    if (canHover) { f.addEventListener('mouseenter', () => setPlaying(f, true)); f.addEventListener('mouseleave', () => setPlaying(f, false)); }
+    f.addEventListener('click', () => {
+      const v = f.querySelector('video');
+      api.track('video_tapped', { id: f.dataset.v });
+      if (v) { v.muted = false; v.play(); (v.requestFullscreen || v.webkitEnterFullscreen || (() => {})).call(v); }
+      else ui.toast('Placeholder: this would unmute and go fullscreen');
+    });
+  });
+  if (!canHover && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((ents) => ents.forEach((en) => setPlaying(en.target, en.intersectionRatio >= 0.6)), { threshold: [0, 0.6, 1] });
+    document.querySelectorAll('.vframe').forEach((f) => io.observe(f));
+  }
+  document.querySelectorAll('[data-share-v]').forEach((b) => b.onclick = () => {
+    ui.copy(location.origin + location.pathname + '#video-' + b.dataset.shareV); api.track('shared_video', { id: b.dataset.shareV });
+  });
+  if (location.hash.startsWith('#video-')) { const el = document.querySelector(location.hash); if (el) setTimeout(() => el.scrollIntoView({ block: 'center' }), 300); }
+
+  /* ---------------- archive teaser ---------------- */
+  fetch('posts/index.json').then((r) => r.json()).then((posts) => {
+    $('#stories').innerHTML = posts.slice(0, 4).map((p) => `<a class="story" href="post.html?p=${p.slug}">
+      <span class="type">${p.type === 'news' ? 'Satire · News' : 'Otherpedia'}</span><h3>${esc(p.title)}</h3><p>${esc(p.summary)}</p></a>`).join('');
+  }).catch(() => { $('#stories').innerHTML = '<p class="muted">Run a local server to load posts (see README).</p>'; });
+
+  /* ---------------- SMS ---------------- */
+  $('#sms-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const err = $('#sms-err');
+    const phone = $('#sms-phone').value.trim();
+    if (phone.replace(/\D/g, '').length < 10) { err.textContent = 'Enter a full phone number.'; err.classList.remove('hidden'); return; }
+    if (!$('#sms-consent').checked) { err.textContent = 'Tick the box so we\'re allowed to text you.'; err.classList.remove('hidden'); return; }
+    err.classList.add('hidden');
+    await api.smsOptIn({ phone, consentText: $('#sms-consent-text').textContent });
+    $('#sms-form').classList.add('hidden'); $('#sms-done').classList.remove('hidden');
+  });
+})();
+</script>
+</body>
+</html>

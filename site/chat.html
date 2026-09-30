@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Write · AI But Great</title>
+<meta name="description" content="Tell it what you need written. 3 free responses, no card needed.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F5F1E8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Caveat:wght@600&display=swap">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<header id="masthead" data-compact="1" data-current="chat"></header>
+
+<main class="wrap chat-page">
+  <aside class="history" data-dev="Chat history: GET /api/conversations. Anonymous chats are kept per device and moved to the account at sign-in.">
+    <a href="chat.html" class="btn btn-sm btn-red" style="display:flex;margin-bottom:14px;color:#fff">+ New chat</a>
+    <h3>Your chats</h3>
+    <div id="hist"></div>
+  </aside>
+  <div>
+    <div class="history-mobile" style="margin-bottom:10px">
+      <select class="input" id="hist-m" aria-label="Your chats"><option value="">Your chats…</option></select>
+      <a href="chat.html" class="btn btn-sm btn-red" style="color:#fff">New</a>
+    </div>
+    <div id="chat"></div>
+  </div>
+</main>
+
+<script src="content/examples.js?v=6"></script>
+<script src="js/formats.js?v=6"></script>
+<script src="js/mock-api.js?v=6"></script>
+<script src="js/common.js?v=6"></script>
+<script src="js/chat.js?v=6"></script>
+<script>
+(async function () {
+  const api = ABG.api, esc = ABG_FORMATS.esc;
+  const q = new URLSearchParams(location.search);
+  let current = q.get('c');
+
+  async function renderHistory() {
+    const list = await api.listConversations();
+    document.getElementById('hist').innerHTML = list.length
+      ? list.map((c) => `<a href="chat.html?c=${c.id}" ${c.id === current ? 'aria-current="page"' : ''}>${esc(c.title)}</a>`).join('')
+      : '<p class="muted" style="font-size:14px">Nothing yet. Your chats will show up here.</p>';
+    document.getElementById('hist-m').innerHTML = '<option value="">Your chats…</option>' +
+      list.map((c) => `<option value="${c.id}" ${c.id === current ? 'selected' : ''}>${esc(c.title)}</option>`).join('');
+  }
+  document.getElementById('hist-m').onchange = (e) => { if (e.target.value) location.href = 'chat.html?c=' + e.target.value; };
+
+  const chat = ABG.Chat.mount(document.getElementById('chat'), {
+    full: true,
+    onConversation(id) {
+      if (id !== current) { current = id; history.replaceState(null, '', 'chat.html?c=' + id); }
+      renderHistory();
+    },
+  });
+  renderHistory();
+  if (current && !(await chat.load(current))) { current = null; history.replaceState(null, '', 'chat.html'); renderHistory(); }
+  if (q.get('q')) chat.send(q.get('q'));
+  else if (!current) chat.focus();
+  window.addEventListener('abg:state', renderHistory);
+})();
+</script>
+</body>
+</html>

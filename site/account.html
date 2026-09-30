@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Account · AI But Great</title>
+<meta name="description" content="Your plan, purchases, referral link and preferences.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F5F1E8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Caveat:wght@600&display=swap">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<header id="masthead" data-compact="1" data-current="account"></header>
+
+<main class="wrap" style="max-width:860px;padding-top:24px;padding-bottom:40px">
+  <p class="kicker">Settings</p>
+  <h1 class="h-section" id="hello">Your account</h1>
+  <div id="root" style="margin-top:18px"></div>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="js/formats.js?v=6"></script>
+<script src="js/mock-api.js?v=6"></script>
+<script src="js/common.js?v=6"></script>
+<script>
+(function () {
+  const api = ABG.api, ui = ABG.ui, esc = ABG_FORMATS.esc;
+  const root = document.getElementById('root');
+  const fmtDate = (t) => new Date(t).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  async function render() {
+    const me = await api.me();
+    if (!me.user) {
+      document.getElementById('hello').textContent = 'Your account';
+      root.innerHTML = `<div class="panel"><h2>Sign in to see your account</h2><p class="muted">Your plan, purchases, and past chats live here.</p><button class="btn btn-red" id="si">Continue with Google</button></div>`;
+      document.getElementById('si').onclick = async () => { if (await ui.signIn()) render(); };
+      return;
+    }
+    const [usage, purchases, ref, prefs, offer] = await Promise.all([api.myUsage(), api.myPurchases(), api.referral(), api.getPrefs(), api.lifetimeOffer()]);
+    const e = me.ent;
+    document.getElementById('hello').textContent = 'Hi, ' + me.user.name.split(' ')[0] + '.';
+
+    let planName = 'Free', planLine = `${e.freeLeft} free response${e.freeLeft === 1 ? '' : 's'} left.`, actions = `<button class="btn btn-red" data-a="plans">See plans</button>`;
+    if (usage.spent && !e.hasAccess) planName = 'No active plan';
+    if (e.lifetime) { planName = 'Lifetime'; planLine = 'Paid once. Write forever.'; actions = ''; }
+    else if (e.pastDue) { planName = 'Weekly · payment failed'; planLine = 'Your last renewal didn\'t go through. Update your payment method to keep writing.'; actions = `<button class="btn btn-red" data-a="fix">Update payment method</button>`; }
+    else if (e.passActive && e.autoRenew) { planName = 'Weekly, auto-renew'; planLine = `Renews ${fmtDate(e.passEndsAt)} for ${ui.money(me.prices.weekly)}.`; actions = `<button class="btn" data-a="cancel">Cancel auto-renew</button>`; }
+    else if (e.passActive) { planName = 'Pass'; planLine = `Ends ${fmtDate(e.passEndsAt)} (${ui.daysLeft(e.passEndsAt)} days left). Won't renew.`; actions = `<button class="btn" data-a="plans">See plans</button>` + (purchases.some((p) => p.plan === 'weekly' && p.status === 'paid') ? ` <button class="btn btn-ghost" data-a="resume">Turn auto-renew back on</button>` : ''); }
+    if (e.singleCredits) planLine += ` Plus ${e.singleCredits} paid response${e.singleCredits > 1 ? 's' : ''}.`;
+
+    root.innerHTML = `
+      <div class="panel" data-dev="Plan card reads the entitlements row. Cancel = stripe.subscriptions.update(cancel_at_period_end). Must be self-serve (some states require it).">
+        <p class="label">Your plan</p><h2>${planName}</h2><p class="muted" style="margin:0 0 12px">${planLine}</p>
+        ${offer ? `<div class="disclose" style="background:var(--card)"><b>Your pass ended.</b> You've spent ${ui.money(offer.spent)}. Put it toward lifetime and pay ${ui.money(offer.price)} instead of ${ui.money(offer.full)}.<br><button class="btn btn-red btn-sm" data-a="offer" style="margin-top:8px">Get lifetime for ${ui.money(offer.price)}</button></div>` : ''}
+        <div class="row-inline">${actions}</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="n">${usage.responses}</div><div class="l">responses</div></div>
+        <div class="stat"><div class="n">${usage.words.toLocaleString()}</div><div class="l">words written</div></div>
+        <div class="stat"><div class="n">${ui.money(usage.spent)}</div><div class="l">spent</div></div>
+        <div class="stat"><div class="n">${ref.signups}</div><div class="l">friends invited</div></div>
+      </div>
+
+      <div class="panel" data-dev="Referral: every user gets a link. When a friend signs up with it, BOTH get ${ref.bonus} free responses (credited at friend's signup).">
+        <h2>Give 3, get 3</h2>
+        <p class="muted" style="margin:0 0 10px">When a friend signs up with your link, you both get ${ref.bonus} free responses.</p>
+        <div class="row-inline"><input class="input mono" readonly value="${esc(ref.link)}" id="reflink"><button class="btn btn-red" data-a="copyref">Copy link</button></div>
+        ${ref.earned ? `<p class="mono" style="margin:10px 0 0">You've earned ${ref.earned} free responses so far.</p>` : ''}
+      </div>
+
+      <div class="panel">
+        <h2>Purchases</h2>
+        ${purchases.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Date</th><th>What</th><th>Amount</th><th>Status</th><th></th></tr></thead><tbody>
+          ${purchases.map((p) => `<tr><td>${fmtDate(p.createdAt)}</td><td>${esc(api.PLANS[p.plan] ? api.PLANS[p.plan].name : p.plan)}</td><td>${ui.money(p.amount)}</td>
+            <td><span class="pill ${p.status === 'paid' ? 'ink' : p.status === 'failed' ? 'red' : ''}">${p.status}</span></td><td><button class="link mono" data-receipt="${p.id}">Receipt</button></td></tr>`).join('')}
+          </tbody></table></div>` : '<p class="muted" style="margin:0">No purchases yet.</p>'}
+        <p class="mono muted" style="margin:10px 0 0">Need a refund? See our <a href="refund.html">refund policy</a>.</p>
+      </div>
+
+      <div class="two">
+        <div class="panel" data-dev="PATCH marketingOptIn → our DB, then push to Loops. Loops' unsubscribe webhook writes back here.">
+          <h2>Email</h2>
+          <p class="muted" style="margin:0">${esc(me.user.email)}</p>
+          <label class="check"><input type="checkbox" id="mkt" ${prefs.marketingOptIn ? 'checked' : ''}> Send me tips and deals, about twice a month.</label>
+          <p class="mono muted" style="margin:0">Receipts and plan emails always send. Every email has an unsubscribe link.</p>
+        </div>
+        <div class="panel">
+          <h2>Texts</h2>
+          ${prefs.smsOptIn
+            ? `<p style="margin:0 0 8px">Texts on for <b>${esc(prefs.phone)}</b> since ${fmtDate(prefs.smsAt)}.</p><p class="mono muted" style="margin:0">To stop, reply STOP to any text.</p>`
+            : `<p class="muted" style="margin:0 0 10px">Get 20% off by text.</p>
+               <input class="input" type="tel" id="ph" placeholder="(555) 123-4567">
+               <label class="check"><input type="checkbox" id="phc"> <span id="phct">Yes, text me marketing messages from AI But Great, about 2 to 4 a month. Agreeing isn't required to buy anything. Msg and data rates may apply. Reply STOP to opt out, HELP for help.</span></label>
+               <button class="btn btn-sm btn-red" data-a="sms">Text me the code</button>`}
+        </div>
+      </div>
+
+      <div class="row-inline" style="margin-top:6px"><a class="btn" href="chat.html">Your chats</a><button class="btn btn-ghost" data-a="signout">Sign out</button></div>`;
+
+    root.querySelectorAll('[data-a]').forEach((b) => b.onclick = () => act(b.dataset.a, me));
+    root.querySelectorAll('[data-receipt]').forEach((b) => b.onclick = () => ui.modal(`<h2>Receipt</h2><p class="muted">In the real app this is the Stripe receipt (hosted_invoice_url or receipt_url). Loops also emails it after every purchase.</p><p class="mono">${esc(b.dataset.receipt)}</p>`));
+    const mkt = document.getElementById('mkt'); if (mkt) mkt.onchange = async () => { await api.setMarketing(mkt.checked); ui.toast(mkt.checked ? 'You\'re on the list' : 'Unsubscribed from marketing'); };
+  }
+
+  async function act(a, me) {
+    if (a === 'plans') { await ui.paywallModal(); }
+    if (a === 'fix') { await ui.checkout('weekly'); }
+    if (a === 'offer') { await ui.lifetimeOffer(); }
+    if (a === 'resume') { await api.resumeAutoRenew(); ui.toast('Auto-renew is back on'); }
+    if (a === 'copyref') { ui.copy(document.getElementById('reflink').value); api.trackReferralSent(); }
+    if (a === 'signout') { await api.signOut(); location.href = 'index.html'; return; }
+    if (a === 'sms') {
+      const ph = document.getElementById('ph').value.trim();
+      if (ph.replace(/\D/g, '').length < 10) return ui.toast('Enter a full phone number');
+      if (!document.getElementById('phc').checked) return ui.toast('Tick the box so we\'re allowed to text you');
+      await api.smsOptIn({ phone: ph, consentText: document.getElementById('phct').textContent });
+      ui.toast('Sent. Your code is TEXT20');
+    }
+    if (a === 'cancel') {
+      const until = new Date(me.ent.passEndsAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+      const m = ui.modal(`<h2>Cancel auto-renew?</h2><p>You'll keep access until <b>${until}</b>. After that, nothing else is charged.</p>
+        <div class="row-inline"><button class="btn btn-red" data-yes>Yes, cancel</button><button class="btn" data-no>Keep it</button></div>`);
+      m.el.querySelector('[data-no]').onclick = m.close;
+      m.el.querySelector('[data-yes]').onclick = async () => { await api.cancelAutoRenew(); m.close(); ui.toast('Auto-renew is off'); render(); };
+      return;
+    }
+    render();
+  }
+
+  render();
+  window.addEventListener('abg:state', render);
+})();
+</script>
+</body>
+</html>

@@ -14,6 +14,10 @@ python3 -m http.server 5173
 
 Then open http://localhost:5173
 
+## The new site (prototype)
+
+`site/` is a clickable prototype of the full product site from the "How to Make the Site" doc: homepage, chat with the free-to-paid flow, fake Stripe checkout, account page, admin panel, The Archive, waitlist and legal outlines. The backend is faked in the browser. Open http://localhost:5173/site/ and read [site/HANDOFF.md](site/HANDOFF.md).
+
 ## What's in here
 
 | File | What it is |

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Archive · AI But Great</title>
+<meta name="description" content="Encyclopedia pages from futures that haven't happened and satirical news about us, all written by our AI.">
+<link rel="canonical" href="https://aibutgreat.com/archive">
+<meta property="og:title" content="The Archive · AI But Great">
+<meta property="og:description" content="Things our AI wrote for fun.">
+<meta name="theme-color" content="#F5F1E8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Caveat:wght@600&display=swap">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<header id="masthead" data-compact="1" data-current="archive"></header>
+
+<main class="wrap" style="padding-top:28px;padding-bottom:30px">
+  <p class="kicker">The Archive</p>
+  <h1 class="h-section">Things our AI wrote for fun.</h1>
+  <p class="dek">Every piece here was written by our AI. We show the prompt at the top of each one. The news is satire, and the people in it are made up.</p>
+  <div class="filters" id="f">
+    <button class="chip" data-t="" aria-pressed="true">Everything</button>
+    <button class="chip" data-t="news" aria-pressed="false">Satire news</button>
+    <button class="chip" data-t="wiki" aria-pressed="false">Otherpedia</button>
+  </div>
+  <div class="cols" id="list" data-dev="Each post = one markdown file → its own URL (/archive/{slug}) so it can rank and be shared. List from posts/index.json."></div>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="js/formats.js?v=6"></script>
+<script src="js/mock-api.js?v=6"></script>
+<script src="js/common.js?v=6"></script>
+<script>
+(async function () {
+  const esc = ABG_FORMATS.esc;
+  let posts = [];
+  try { posts = await fetch('posts/index.json').then((r) => r.json()); } catch (e) {}
+  posts.sort((a, b) => b.date.localeCompare(a.date));
+  const list = document.getElementById('list');
+  function render(t) {
+    list.innerHTML = posts.filter((p) => !t || p.type === t).map((p) => `<a class="story" href="post.html?p=${p.slug}">
+      <span class="type">${p.type === 'news' ? 'Satire · News' : 'Otherpedia'} · ${new Date(p.date + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+      <h3>${esc(p.title)}</h3><p>${esc(p.summary)}</p></a>`).join('') || '<p class="muted">Nothing here yet.</p>';
+  }
+  render('');
+  document.getElementById('f').onclick = (e) => {
+    const b = e.target.closest('[data-t]'); if (!b) return;
+    document.querySelectorAll('#f .chip').forEach((x) => x.setAttribute('aria-pressed', x === b));
+    render(b.dataset.t);
+  };
+})();
+</script>
+</body>
+</html>

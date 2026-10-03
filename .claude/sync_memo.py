@@ -5,7 +5,8 @@ Headings, numbered lists, italics (*word*) and the known links are reapplied.
 """
 import re, sys, html as ht
 
-HEADINGS = {"The first product:", "B2B:", "How the B2B product works (stage 1):",
+HEADINGS = {"The first product:", "B2B:", "Here’s how the core operation works:",
+            "How the B2B product works (stage 1):", "This can be a massive company:",
             "This can be a massive company (stage 2):", "About me:"}
 # phrase to link -> url. Phrases must be unique enough to match once.
 LINKS = [
